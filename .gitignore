@@ -1,0 +1,13 @@
+# Virtual Environment
+.venv/
+
+# Zensical Cache and Build directories
+site/
+.cache/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local IDE/Antigravity CLI configurations
+.antigravitycli/

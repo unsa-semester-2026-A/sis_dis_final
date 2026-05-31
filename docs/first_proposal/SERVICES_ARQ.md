@@ -1,3 +1,7 @@
+!!! note "First Proposal / Primera Propuesta"
+
+    Esta documentación corresponde a la primera propuesta de arquitectura de servicios (MVP monolito modular).
+
 ## 🧩 Arquitectura a nivel de servicios (MVP monolito modular)
 
 ```mermaid
