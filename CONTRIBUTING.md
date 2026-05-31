@@ -7,7 +7,7 @@ Welcome to the Digital Wallet project repository. To maintain code quality and o
 - **Language**: All code, comments, branch names, commit messages, pull requests, and documentation must be written in English.
 - **GitHub Board**: If a task is not registered and assigned in the GitHub Project board, it does not exist. Do not work on unregistered tasks [(link)](https://github.com/orgs/unsa-semester-2026-A/projects/1/views/1).
 - **WIP Limits**: Each team member is strictly limited to one task in the "In Progress" column at a time. Finish your current task before starting a new one.
-- **Documentation**: Architecture decisions and API contracts must be documented in the GitHub Wiki using User Story Mapping before coding begins.
+- **Documentation**: Architecture decisions and API contracts must be documented in Zensical using User Story Mapping before coding begins.
 
 ## Git Workflow (Git Flow)
 

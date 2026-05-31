@@ -1,3 +1,7 @@
+!!! note "First Proposal / Primera Propuesta"
+
+    Esta documentación corresponde a la primera propuesta de infraestructura del proyecto (MVP monolito modular).
+
 ## 🧩 Visión general del sistema (MVP escalable)
 
 El presente documento muestra la organizacion sobre infraestructura del proyecto

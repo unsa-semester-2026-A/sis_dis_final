@@ -35,7 +35,7 @@ integre con la última fase de interoperabilidad del BCRP
   todos entiendan el sistema.
   
 - Documentación Viva: Las decisiones de arquitectura y los contratos de las APIs
-  se documentan en la GitHub Wiki antes de programar, no después. Se sigue el
+  se documentan en la documentación de Zensical antes de programar, no después. Se sigue el
   marco de `User Story Mapping` para la gestión de los requerimientos.
 
 - Todo el código (incluida la documentación) debe estar en inglés.
