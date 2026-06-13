@@ -3,9 +3,10 @@ icon: lucide/ruler
 ---
 # Overview
 
-Actualmente se tienen las siguientes propuestas de diseño y arquitectura para el proyecto:
+The current documentation contains the main architecture proposals and API
+contracts for the Digital Wallet project:
 
-- [Arquitectura de Infraestructura](INFRAESTRUCTURE_ARQ.md)
-- [Arquitectura de Servicios](SERVICES_ARQ.md)
-- [Contratos de API (Resumen)](API_CONTRACTS.md)
-- [Contratos de API (Detallado)](API_CONTRACTS_DETAILED.md)
+- [Global Infrastructure Architecture](INFRAESTRUCTURE_ARQ.md)
+- [Services Architecture](SERVICES_ARQ.md)
+- [API Contracts Summary](API_CONTRACTS.md)
+- [API Contracts Detailed](API_CONTRACTS_DETAILED.md)
