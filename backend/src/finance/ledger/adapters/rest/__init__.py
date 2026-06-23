@@ -176,9 +176,7 @@ def create_ledger_router(
                 exchange_rate=Decimal(body.exchange_rate),
                 lineage_token=body.lineage_token,
                 transaction_id=(
-                    EntityId(body.transaction_id)
-                    if body.transaction_id
-                    else None
+                    EntityId(body.transaction_id) if body.transaction_id else None
                 ),
                 tags=dict(body.tags),
                 effective_at=body.effective_at,

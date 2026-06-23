@@ -21,21 +21,17 @@ def create_app() -> FastAPI:
         A fully wired FastAPI instance.
     """
     # --- Adapters (outbound / secondary) ---
-    # Using in-memory repositories for now; will be replaced by
-    # JSON file store adapters for the DFS requirement.
-    from tests.ledger.test_use_cases import (
-        InMemoryNodeRepository,
-        InMemoryVectorRepository,
+    from finance.ledger.adapters.file_store import (
+        FileNodeRepository,
+        FileVectorRepository,
     )
 
-    node_repo = InMemoryNodeRepository()
-    vector_repo = InMemoryVectorRepository()
+    node_repo = FileNodeRepository("data")
+    vector_repo = FileVectorRepository("data")
 
     # --- Use Cases (core) ---
     create_node_uc = CreateNodeUseCase(node_repo=node_repo)
-    emit_vector_uc = EmitVectorUseCase(
-        node_repo=node_repo, vector_repo=vector_repo
-    )
+    emit_vector_uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
     evaluate_balance_uc = EvaluateBalanceUseCase(
         node_repo=node_repo, vector_repo=vector_repo
     )

@@ -14,7 +14,6 @@ from finance.ledger.ports.inbound import (
 from finance.shared.domain import EntityId, Money, new_id
 from finance.shared.errors import InactiveNodeError
 
-
 # ---------------------------------------------------------------------------
 # In-memory repository stubs (test doubles)
 # ---------------------------------------------------------------------------
@@ -87,9 +86,7 @@ def vector_repo() -> InMemoryVectorRepository:
 
 
 class TestCreateNodeUseCase:
-    def test_creates_and_persists_node(
-        self, node_repo: InMemoryNodeRepository
-    ) -> None:
+    def test_creates_and_persists_node(self, node_repo: InMemoryNodeRepository) -> None:
         from finance.ledger.core.create_node import CreateNodeUseCase
 
         uc = CreateNodeUseCase(node_repo=node_repo)
@@ -186,16 +183,20 @@ class TestEmitVectorUseCase:
         source, target = self._seed_nodes(node_repo, user_id)
         uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
 
-        v1 = uc.execute(EmitVectorCommand(
-            source_node_id=source.id,
-            target_node_id=target.id,
-            amount=Decimal("10"),
-        ))
-        v2 = uc.execute(EmitVectorCommand(
-            source_node_id=source.id,
-            target_node_id=target.id,
-            amount=Decimal("20"),
-        ))
+        v1 = uc.execute(
+            EmitVectorCommand(
+                source_node_id=source.id,
+                target_node_id=target.id,
+                amount=Decimal("10"),
+            )
+        )
+        v2 = uc.execute(
+            EmitVectorCommand(
+                source_node_id=source.id,
+                target_node_id=target.id,
+                amount=Decimal("20"),
+            )
+        )
         assert v1.lineage_token != v2.lineage_token
 
     def test_preserves_explicit_lineage_token(
@@ -209,12 +210,14 @@ class TestEmitVectorUseCase:
         source, target = self._seed_nodes(node_repo, user_id)
         uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
 
-        vector = uc.execute(EmitVectorCommand(
-            source_node_id=source.id,
-            target_node_id=target.id,
-            amount=Decimal("10"),
-            lineage_token="custom-token-123",
-        ))
+        vector = uc.execute(
+            EmitVectorCommand(
+                source_node_id=source.id,
+                target_node_id=target.id,
+                amount=Decimal("10"),
+                lineage_token="custom-token-123",
+            )
+        )
         assert vector.lineage_token == "custom-token-123"
 
     def test_rejects_inactive_source_node(
@@ -230,11 +233,13 @@ class TestEmitVectorUseCase:
         uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
 
         with pytest.raises(InactiveNodeError):
-            uc.execute(EmitVectorCommand(
-                source_node_id=source.id,
-                target_node_id=target.id,
-                amount=Decimal("10"),
-            ))
+            uc.execute(
+                EmitVectorCommand(
+                    source_node_id=source.id,
+                    target_node_id=target.id,
+                    amount=Decimal("10"),
+                )
+            )
 
     def test_rejects_inactive_target_node(
         self,
@@ -249,11 +254,13 @@ class TestEmitVectorUseCase:
         uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
 
         with pytest.raises(InactiveNodeError):
-            uc.execute(EmitVectorCommand(
-                source_node_id=source.id,
-                target_node_id=target.id,
-                amount=Decimal("10"),
-            ))
+            uc.execute(
+                EmitVectorCommand(
+                    source_node_id=source.id,
+                    target_node_id=target.id,
+                    amount=Decimal("10"),
+                )
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -271,26 +278,36 @@ class TestEvaluateBalanceUseCase:
 
         user_id = new_id()
         bank = Node(
-            id=new_id(), user_id=user_id, name="Bank",
-            node_type=NodeType.ASSET, currency="PEN",
+            id=new_id(),
+            user_id=user_id,
+            name="Bank",
+            node_type=NodeType.ASSET,
+            currency="PEN",
         )
         salary = Node(
-            id=new_id(), user_id=user_id, name="Salary",
-            node_type=NodeType.SOURCE, currency="PEN",
+            id=new_id(),
+            user_id=user_id,
+            name="Salary",
+            node_type=NodeType.SOURCE,
+            currency="PEN",
         )
         node_repo.save(bank)
         node_repo.save(salary)
 
         now = datetime.now(tz=timezone.utc)
-        vector_repo.append(Vector(
-            id=new_id(), lineage_token="lt-1",
-            source_node_id=salary.id, target_node_id=bank.id,
-            amount=Decimal("1000"), effective_at=now, system_at=now,
-        ))
-
-        uc = EvaluateBalanceUseCase(
-            node_repo=node_repo, vector_repo=vector_repo
+        vector_repo.append(
+            Vector(
+                id=new_id(),
+                lineage_token="lt-1",
+                source_node_id=salary.id,
+                target_node_id=bank.id,
+                amount=Decimal("1000"),
+                effective_at=now,
+                system_at=now,
+            )
         )
+
+        uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
         balance = uc.execute(BalanceQuery(node_id=bank.id))
         assert balance == Money(Decimal("1000"), "PEN")
 
@@ -303,35 +320,54 @@ class TestEvaluateBalanceUseCase:
 
         user_id = new_id()
         bank = Node(
-            id=new_id(), user_id=user_id, name="Bank",
-            node_type=NodeType.ASSET, currency="PEN",
+            id=new_id(),
+            user_id=user_id,
+            name="Bank",
+            node_type=NodeType.ASSET,
+            currency="PEN",
         )
         salary = Node(
-            id=new_id(), user_id=user_id, name="Salary",
-            node_type=NodeType.SOURCE, currency="PEN",
+            id=new_id(),
+            user_id=user_id,
+            name="Salary",
+            node_type=NodeType.SOURCE,
+            currency="PEN",
         )
         food = Node(
-            id=new_id(), user_id=user_id, name="Food",
-            node_type=NodeType.SINK, currency="PEN",
+            id=new_id(),
+            user_id=user_id,
+            name="Food",
+            node_type=NodeType.SINK,
+            currency="PEN",
         )
         for n in (bank, salary, food):
             node_repo.save(n)
 
         now = datetime.now(tz=timezone.utc)
-        vector_repo.append(Vector(
-            id=new_id(), lineage_token="lt-1",
-            source_node_id=salary.id, target_node_id=bank.id,
-            amount=Decimal("1000"), effective_at=now, system_at=now,
-        ))
-        vector_repo.append(Vector(
-            id=new_id(), lineage_token="lt-2",
-            source_node_id=bank.id, target_node_id=food.id,
-            amount=Decimal("300"), effective_at=now, system_at=now,
-        ))
-
-        uc = EvaluateBalanceUseCase(
-            node_repo=node_repo, vector_repo=vector_repo
+        vector_repo.append(
+            Vector(
+                id=new_id(),
+                lineage_token="lt-1",
+                source_node_id=salary.id,
+                target_node_id=bank.id,
+                amount=Decimal("1000"),
+                effective_at=now,
+                system_at=now,
+            )
         )
+        vector_repo.append(
+            Vector(
+                id=new_id(),
+                lineage_token="lt-2",
+                source_node_id=bank.id,
+                target_node_id=food.id,
+                amount=Decimal("300"),
+                effective_at=now,
+                system_at=now,
+            )
+        )
+
+        uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
         balance = uc.execute(BalanceQuery(node_id=bank.id))
         assert balance == Money(Decimal("700"), "PEN")
 
@@ -344,27 +380,37 @@ class TestEvaluateBalanceUseCase:
 
         user_id = new_id()
         usd_bank = Node(
-            id=new_id(), user_id=user_id, name="USD Bank",
-            node_type=NodeType.ASSET, currency="USD",
+            id=new_id(),
+            user_id=user_id,
+            name="USD Bank",
+            node_type=NodeType.ASSET,
+            currency="USD",
         )
         pen_bank = Node(
-            id=new_id(), user_id=user_id, name="PEN Bank",
-            node_type=NodeType.ASSET, currency="PEN",
+            id=new_id(),
+            user_id=user_id,
+            name="PEN Bank",
+            node_type=NodeType.ASSET,
+            currency="PEN",
         )
         for n in (usd_bank, pen_bank):
             node_repo.save(n)
 
         now = datetime.now(tz=timezone.utc)
-        vector_repo.append(Vector(
-            id=new_id(), lineage_token="lt-fx",
-            source_node_id=pen_bank.id, target_node_id=usd_bank.id,
-            amount=Decimal("375"), exchange_rate=Decimal("0.27"),
-            effective_at=now, system_at=now,
-        ))
-
-        uc = EvaluateBalanceUseCase(
-            node_repo=node_repo, vector_repo=vector_repo
+        vector_repo.append(
+            Vector(
+                id=new_id(),
+                lineage_token="lt-fx",
+                source_node_id=pen_bank.id,
+                target_node_id=usd_bank.id,
+                amount=Decimal("375"),
+                exchange_rate=Decimal("0.27"),
+                effective_at=now,
+                system_at=now,
+            )
         )
+
+        uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
         balance = uc.execute(BalanceQuery(node_id=usd_bank.id))
         assert balance == Money(Decimal("101.25"), "USD")
 
@@ -376,13 +422,14 @@ class TestEvaluateBalanceUseCase:
         from finance.ledger.core.evaluate_balance import EvaluateBalanceUseCase
 
         bank = Node(
-            id=new_id(), user_id=new_id(), name="Bank",
-            node_type=NodeType.ASSET, currency="PEN",
+            id=new_id(),
+            user_id=new_id(),
+            name="Bank",
+            node_type=NodeType.ASSET,
+            currency="PEN",
         )
         node_repo.save(bank)
 
-        uc = EvaluateBalanceUseCase(
-            node_repo=node_repo, vector_repo=vector_repo
-        )
+        uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
         balance = uc.execute(BalanceQuery(node_id=bank.id))
         assert balance == Money.zero("PEN")

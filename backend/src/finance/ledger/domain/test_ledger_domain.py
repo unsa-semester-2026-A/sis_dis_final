@@ -118,9 +118,7 @@ class TestVector:
             self._make_vector(exchange_rate=Decimal("-1"))
 
     def test_target_amount_property(self) -> None:
-        v = self._make_vector(
-            amount=Decimal("100"), exchange_rate=Decimal("3.75")
-        )
+        v = self._make_vector(amount=Decimal("100"), exchange_rate=Decimal("3.75"))
         assert v.target_amount == Decimal("375.00")
 
     def test_frozen(self) -> None:

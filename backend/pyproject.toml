@@ -38,5 +38,5 @@ convention = "google"
 "test_*.py" = ["D"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["src"]
 pythonpath = ["src"]

@@ -1,12 +1,11 @@
 """Tests for shared domain primitives."""
 
 import uuid
-
 from decimal import Decimal
 
 import pytest
 
-from finance.shared.domain import EntityId, Money, new_id
+from finance.shared.domain import Money, new_id
 from finance.shared.errors import CurrencyMismatchError
 
 
