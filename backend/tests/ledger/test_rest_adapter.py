@@ -135,5 +135,5 @@ class TestEvaluateBalanceEndpoint:
         resp = client.get(f"/ledger/nodes/{bank_id}/balance")
         assert resp.status_code == 200
         data = resp.json()
-        assert data["amount"] == "750.00"
+        assert Decimal(data["amount"]) == Decimal("750.00")
         assert data["currency"] == "PEN"
