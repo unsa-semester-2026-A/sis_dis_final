@@ -1,15 +1,40 @@
-#import "../slides.typ": slide-timeline
+#import "../slides.typ": slide-page
+#import "../style.typ" as style
 
-#slide-timeline(
-  title: "SISTEMAS\nDISTRIBUIDOS",
-  card-title: "2 PHASE COMMIT",
-  card-body: [
-    Para transferencias entre bancos, el sistema debe coordinar nodos y garantizar que la operación se confirme en todos o se revierta.
-  ],
-  items: (
-    ("01", "Prepare", "El coordinador consulta si los nodos pueden ejecutar la operación."),
-    ("02", "Vote", "Cada banco responde si está listo o si debe abortar."),
-    ("03", "Commit", "Si todos aceptan, se confirma la transacción."),
-    ("04", "Rollback", "Si un nodo falla, se revierte la operación.")
-  )
-)
+#slide-page[
+  #place(top + left, dx: 80pt, dy: 55pt)[
+    #text(size: 58pt, weight: "bold", fill: style.theme.text-dark)[TWO PHASE COMMIT]
+  ]
+
+  #place(top + left, dx: 120pt, dy: 135pt)[
+    #box(width: 760pt, height: 480pt)[
+      #image("../src/fig/diagrams/twopc.png", fit: "contain")
+    ]
+  ]
+
+  #place(top + left, dx: 940pt, dy: 170pt)[
+    #box(width: 360pt)[
+      #text(size: 25pt, weight: "bold")[Coordinación distribuida]
+      #v(18pt)
+      #text(size: 19pt, fill: style.theme.text-muted)[
+        El coordinador solicita a los bancos preparar la operación.
+      ]
+
+      #v(24pt)
+
+      #text(size: 25pt, weight: "bold")[Confirmación o reversión]
+      #v(18pt)
+      #text(size: 19pt, fill: style.theme.text-muted)[
+        Si todos aceptan, se confirma. Si algún nodo falla, se ejecuta rollback.
+      ]
+    ]
+  ]
+
+  #place(top + left, dx: 120pt, dy: 665pt)[
+    #rect(width: 1160pt, height: 58pt, fill: style.theme.primary, radius: 8pt)[
+      #align(center + horizon)[
+        #text(size: 24pt, weight: "bold")[Prepare → Vote → Commit / Rollback]
+      ]
+    ]
+  ]
+]

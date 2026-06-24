@@ -6,10 +6,10 @@
     La solución se plantea como un sistema distribuido pequeño y realista para el alcance del curso.
   ],
   pills: (
-    "MOBILE APP → API GATEWAY",
-    "AUTH SERVICE + WALLET SERVICE",
-    "TAPP MOCK COMO DEPENDENCIA EXTERNA",
-    "AZURE SQL, COSMOS DB Y SERVICE BUS",
+    "Mobile App → API Gateway",
+    "Auth Service + Wallet Service",
+    "TAPP Mock como dependencia externa",
+    "Azure SQL, Cosmos DB y Service Bus",
   ),
-  image: image("../src/fig/fixed/unsa.png", fit: "contain")
+  image: image("../src/fig/diagrams/arquitectura.png", fit: "contain")
 )

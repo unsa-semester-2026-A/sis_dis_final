@@ -1,10 +1,10 @@
 #import "../slides.typ": slide-timeline-phases
 
 #slide-timeline-phases(
-  title: "TRABAJO PENDIENTE",
+  title: "CIERRE HACIA HITO 2",
   items: (
-    ("01", "Semana 2", "Transferencias distribuidas, 2PC, concurrencia e historial."),
-    ("02", "Semana 3", "Categorías, presupuestos, correcciones y reportes."),
-    ("03", "Semana 4", "Integración final, pruebas, video y demostración."),
+    ("01", "Integración", "Conectar backend, frontend y TAPP Mock en un flujo funcional."),
+    ("02", "Validación", "Probar transferencias, 2PC, historial e idempotencia."),
+    ("03", "Entrega final", "Preparar demo, documentación y exposición para el 06/07/2026."),
   )
 )
