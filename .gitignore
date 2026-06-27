@@ -11,3 +11,20 @@ __pycache__/
 
 # Local IDE/Antigravity CLI configurations
 .antigravitycli/
+
+.agents/
+.codex/
+
+# 1. Carpeta de inicialización de Terraform (plugins y proveedores)
+.terraform/
+
+# 2. Archivos de estado local (¡NUNCA los subas, contienen secretos en texto plano!)
+*.tfstate
+*.tfstate.*
+
+# 3. Archivos de variables con contraseñas o credenciales sensibles
+*.tfvars
+*.tfvars.json
+
+# 4. Archivos de variables de entorno para tokens/secretos
+.env
