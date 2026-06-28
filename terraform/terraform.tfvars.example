@@ -1,1 +1,7 @@
-subscription_id = "tu-id-de-suscripcion-real-aqui"
+subscription_id                = "tu-id-de-suscripcion-real-aqui"
+created_resource_group_name    = "sisdis"
+location                       = "eastus2"
+imported_resource_group_name   = "pacocha-az"
+container_app_environment_name = "managedEnvironment-pacochaaz-bd3b"
+key_vault_name                 = "Rodrygoleu7Komekito25"
+log_analytics_workspace_name   = "log-analytics-workspace-sisdis"

@@ -3,6 +3,6 @@
 # name es el nombre del recurso en azure
 # location es la ubicacion del recurso en azure
 resource "azurerm_resource_group" "main" {
-  name     = "sisdis"
-  location = "eastus2"
+  name     = var.created_resource_group_name
+  location = var.location
 }
