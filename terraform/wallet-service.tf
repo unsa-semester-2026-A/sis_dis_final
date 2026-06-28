@@ -12,4 +12,9 @@ resource "azurerm_container_app" "main" {
       memory = "0.5Gi"
     }
   }
+
+  ingress {
+    target_port = 8080
+    external    = true
+  }
 }

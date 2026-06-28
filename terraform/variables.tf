@@ -39,3 +39,39 @@ variable "log_analytics_workspace_name" {
   description = "The name of the Log Analytics Workspace"
   default     = "log-analytics-workspace-sisdis"
 }
+
+variable "wallet_container_app_name" {
+  type        = string
+  description = "The name of the Container App in Azure"
+  default     = "wallet-app"
+}
+
+variable "wallet_container_image_name" {
+  type        = string
+  description = "The name of the container image"
+  default     = "wallet-container"
+}
+
+variable "tap_mock_container_app_name" {
+  type        = string
+  description = "The name of the Container App in Azure"
+  default     = "tap-mock-app"
+}
+
+variable "tap_mock_container_image_name" {
+  type        = string
+  description = "The name of the container image"
+  default     = "tap-mock-container"
+}
+
+variable "auth_container_app_name" {
+  type        = string
+  description = "The name of the Container App in Azure"
+  default     = "auth-app"
+}
+
+variable "auth_container_image_name" {
+  type        = string
+  description = "The name of the container image"
+  default     = "auth-container"
+}
