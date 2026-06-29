@@ -75,3 +75,27 @@ variable "auth_container_image_name" {
   description = "The name of the container image"
   default     = "auth-container"
 }
+
+variable "github_secret_token_name" {
+  type        = string
+  description = "The name of the GitHub token to pull images from the GH registry"
+  default = "github-token"
+}
+
+variable "github_secret_token" {
+  type        = string
+  description = "The GitHub token to pull images from the GH registry"
+  sensitive   = true
+}
+
+variable "container_registry_server" {
+  type        = string
+  description = "the registry server name (we dont use azure container to store it)"
+  default     = "ghcr.io"
+}
+
+variable "registry_username" {
+  type        = string
+  description = "the registry username (we dont use azure container to store it)"
+  default     = "unsa-semester-2026-A"  
+}
