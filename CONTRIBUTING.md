@@ -40,4 +40,14 @@ We implement the standard Git Flow branching model. Direct commits to `main` or 
    Support branches? [support/] 
    Version tag prefix? [] 
    Hooks and filters directory? [.../.git/hooks]
+```
 
+
+## Project-Specific Rules
+
+The development workflow, architectural constraints, testing strategies (such as co-located testing), and programming language styling are defined separately for each sub-project:
+
+- **Backend (Python / FastAPI):** Detailed guidelines are located in [backend/README.md](file:///home/alvaro9rqc/1_Pacha/1-unsa/7_S/dis/final/backend/README.md).
+- **Mobile Frontend (Dart / Flutter):** Detailed guidelines are located in [mobile/README.md](file:///home/alvaro9rqc/1_Pacha/1-unsa/7_S/dis/final/mobile/README.md).
+
+All developers are expected to read and follow the respective project instructions before submitting pull requests.
