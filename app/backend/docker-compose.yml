@@ -1,0 +1,49 @@
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8001:8000"
+    environment:
+      - PORT=8000
+      - WALLET_SERVICE_URL=http://wallet-service:8000
+      - TAP_MOCK_SERVICE_URL=http://tap-mock-service:8000
+    networks:
+      - sisdis-network
+    restart: always
+
+  wallet-service:
+    build:
+      context: ./wallet-service
+      dockerfile: Dockerfile
+    container_name: wallet-service
+    ports:
+      - "8002:8000"
+    environment:
+      - PORT=8000
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      - TAP_MOCK_SERVICE_URL=http://tap-mock-service:8000
+    networks:
+      - sisdis-network
+    restart: always
+
+  tap-mock-service:
+    build:
+      context: ./tap-mock-service
+      dockerfile: Dockerfile
+    container_name: tap-mock-service
+    ports:
+      - "8003:8000"
+    environment:
+      - PORT=8000
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      - WALLET_SERVICE_URL=http://wallet-service:8000
+    networks:
+      - sisdis-network
+    restart: always
+
+networks:
+  sisdis-network:
+    driver: bridge
