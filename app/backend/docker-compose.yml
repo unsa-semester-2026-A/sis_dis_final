@@ -1,0 +1,37 @@
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./auth-service/app:/app/app
+
+  wallet-service:
+    build:
+      context: ./wallet-service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./wallet-service/app:/app/app
+      - wallet-data:/app/data
+
+  tap-mock-service:
+    build:
+      context: ./tap-mock-service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./tap-mock-service/app:/app/app
+
+volumes:
+  wallet-data:
