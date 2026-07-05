@@ -47,7 +47,7 @@ We implement the standard Git Flow branching model. Direct commits to `main` or 
 
 The development workflow, architectural constraints, testing strategies (such as co-located testing), and programming language styling are defined separately for each sub-project:
 
-- **Backend (Python / FastAPI):** Detailed guidelines are located in [backend/README.md](file:///home/alvaro9rqc/1_Pacha/1-unsa/7_S/dis/final/backend/README.md).
-- **Mobile Frontend (Dart / Flutter):** Detailed guidelines are located in [mobile/README.md](file:///home/alvaro9rqc/1_Pacha/1-unsa/7_S/dis/final/mobile/README.md).
+- **Wallet Service (Python / FastAPI):** Detailed guidelines are located in [app/backend/wallet-service/CONTRIBUTING.md](file:///home/alvaro9rqc/1_Pacha/1-unsa/7_S/dis/final/app/backend/wallet-service/CONTRIBUTING.md).
+- **Mobile Frontend (Dart / Flutter):** Detailed guidelines are located in [app/mobile/README.md](file:///home/alvaro9rqc/1_Pacha/1-unsa/7_S/dis/final/app/mobile/README.md) (if applicable).
 
 All developers are expected to read and follow the respective project instructions before submitting pull requests.
