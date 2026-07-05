@@ -46,7 +46,10 @@ class Money:
             raise ValueError(msg)
 
         allowed_decimals = SUPPORTED_CURRENCIES[self.currency]
-        exponent = self.amount.as_tuple().exponent
+        # Normalize to ignore trailing zeros introduced by float/rate
+        # calculations (e.g. 750.000 -> 750)
+        normalized_amount = self.amount.normalize()
+        exponent = normalized_amount.as_tuple().exponent
         scale = -exponent if isinstance(exponent, int) and exponent < 0 else 0
 
         if scale > allowed_decimals:
