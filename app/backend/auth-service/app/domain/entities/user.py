@@ -4,14 +4,12 @@ import re
 
 from app.domain.value_objects.dni import DNI
 from app.domain.value_objects.email import Email
-from app.domain.value_objects.iban import IBAN
 from app.domain.value_objects.password import Password
 from app.domain.value_objects.phone_number import PhoneNumber
 
 from app.domain.exceptions.auth_errors import (
     InvalidDNIError,
     InvalidEmailError,
-    InvalidIBANError,
     InvalidPhoneNumberError,
     PasswordTooWeakError,
 )
