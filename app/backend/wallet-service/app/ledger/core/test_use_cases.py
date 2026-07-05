@@ -559,3 +559,63 @@ class TestEvaluateBalanceUseCase:
         # Test exact slice
         b_slice = uc.execute(BalanceQuery(node_id=bank.id, start_date=t2, end_date=t2))
         assert b_slice == Money(Decimal("200"), "PEN")  # v2 only
+
+
+class TestNodeStateTransitions:
+    """Test suite covering the finite state machine transitions of a Node.
+
+    A Node transitions from Active -> Inactive. Once inactive, it cannot be
+    mutated back, and the system must reject vector emission attempts.
+    """
+
+    def test_node_active_to_inactive_transition(
+        self,
+        node_repo: InMemoryNodeRepository,
+        vector_repo: InMemoryVectorRepository,
+    ) -> None:
+        from app.ledger.core.emit_vector import EmitVectorUseCase
+
+        user_id = new_id()
+        source = Node(
+            id=new_id(),
+            user_id=user_id,
+            name="Source Bank",
+            node_type=NodeType.ASSET,
+            currency="PEN",
+        )
+        target = Node(
+            id=new_id(),
+            user_id=user_id,
+            name="Target Expense",
+            node_type=NodeType.SINK,
+            currency="PEN",
+        )
+        node_repo.save(source)
+        node_repo.save(target)
+
+        # 1. State: both Active -> Expect Success
+        uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
+        cmd = EmitVectorCommand(
+            source_node_id=source.id,
+            target_node_id=target.id,
+            amount=Decimal("100"),
+        )
+        v1 = uc.execute(cmd)
+        assert v1.amount == Decimal("100")
+
+        # 2. Transition: source node Active -> Inactive
+        source_inactive = source.deactivate()
+        node_repo.save(source_inactive)
+
+        # 3. State: source Inactive, target Active -> Expect InactiveNodeError
+        with pytest.raises(InactiveNodeError, match="Source node .* is inactive"):
+            uc.execute(cmd)
+
+        # 4. Reset source to Active, and transition target to Inactive
+        node_repo.save(source)
+        target_inactive = target.deactivate()
+        node_repo.save(target_inactive)
+
+        # 5. State: source Active, target Inactive -> Expect InactiveNodeError
+        with pytest.raises(InactiveNodeError, match="Target node .* is inactive"):
+            uc.execute(cmd)

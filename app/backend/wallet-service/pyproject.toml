@@ -15,11 +15,13 @@ dev = [
     "pyright==1.1.350",
     "ruff==0.15.14",
     "httpx==0.27.0",
+    "pytest-cov==7.1.0",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["app"]
 pythonpath = ["."]
+addopts = "--cov=app --cov-report=term-missing --cov-branch"
 
 [tool.pyright]
 include = ["app"]

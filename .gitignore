@@ -28,3 +28,9 @@ __pycache__/
 
 # 4. Archivos de variables de entorno para tokens/secretos
 .env
+
+# Pytest and Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.ruff_cache/
