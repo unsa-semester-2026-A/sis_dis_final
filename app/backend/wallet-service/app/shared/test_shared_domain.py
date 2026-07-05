@@ -59,6 +59,28 @@ class TestMoney:
         with pytest.raises(ValueError, match="ISO 4217"):
             Money(Decimal("10"), "PESO")
 
+    def test_unsupported_currency_code(self) -> None:
+        with pytest.raises(ValueError, match="Unsupported or invalid ISO 4217"):
+            Money(Decimal("10"), "ARS")
+
+    def test_currency_exponent_validation(self) -> None:
+        # PEN allows 2 decimal places, 3 is invalid
+        with pytest.raises(ValueError, match="decimal places"):
+            Money(Decimal("10.001"), "PEN")
+
+        # CLP allows 0 decimal places, 1 is invalid
+        with pytest.raises(ValueError, match="decimal places"):
+            Money(Decimal("10.5"), "CLP")
+
+        # BHD allows 3 decimal places, 4 is invalid
+        with pytest.raises(ValueError, match="decimal places"):
+            Money(Decimal("10.0001"), "BHD")
+
+        # Valid exponents should not raise
+        assert Money(Decimal("10.00"), "PEN").amount == Decimal("10.00")
+        assert Money(Decimal("10"), "CLP").amount == Decimal("10")
+        assert Money(Decimal("10.123"), "BHD").amount == Decimal("10.123")
+
     def test_frozen(self) -> None:
         m = Money(Decimal("10"), "PEN")
         with pytest.raises(AttributeError):
