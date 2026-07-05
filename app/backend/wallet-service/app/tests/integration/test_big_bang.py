@@ -1,4 +1,4 @@
-# pyright: reportUnknownMemberType=false, reportUnknownVariableType=false, reportPrivateUsage=false
+# pyright: reportUnknownMemberType=false, reportUnknownVariableType=false
 """Big-Bang integration tests.
 
 Tests the entire system integrated as a whole: the full vertical slice from
@@ -8,10 +8,10 @@ FastAPI application composition root defined in app/main.py.
 
 from decimal import Decimal
 from pathlib import Path
+from typing import cast
 
-import app.main
 import pytest
-from app.ledger.adapters.file_store import FileNodeRepository, FileVectorRepository
+from app.main import create_app
 from app.shared import new_id
 from fastapi.testclient import TestClient
 
@@ -20,26 +20,11 @@ from fastapi.testclient import TestClient
 def big_bang_client(tmp_path: Path) -> TestClient:
     """Setup a Big-Bang integration testing client.
 
-    Monkeypatches the main entrypoint repositories to target a temporary
-    directory on disk, ensuring the full production application runs
-    without polluting real data directories.
+    Instantiates a fresh application instance via the Application Factory
+    configured to write to a temporary test directory.
     """
-    # 1. Instantiate temporary file repositories
-    node_repo = FileNodeRepository(data_dir=tmp_path)
-    vector_repo = FileVectorRepository(data_dir=tmp_path)
-
-    # 2. Inject them into the main module components (monkeypatching)
-    app.main.node_repo = node_repo
-    app.main.vector_repo = vector_repo
-
-    app.main.create_node_uc._node_repo = node_repo
-    app.main.emit_vector_uc._node_repo = node_repo
-    app.main.emit_vector_uc._vector_repo = vector_repo
-    app.main.evaluate_balance_uc._node_repo = node_repo
-    app.main.evaluate_balance_uc._vector_repo = vector_repo
-
-    # 3. Create the test client for the complete FastAPI application
-    return TestClient(app.main.app)
+    app = create_app(data_dir=str(tmp_path))
+    return TestClient(app)
 
 
 def test_big_bang_end_to_end_flow(big_bang_client: TestClient, tmp_path: Path) -> None:
@@ -92,8 +77,6 @@ def test_big_bang_end_to_end_flow(big_bang_client: TestClient, tmp_path: Path) -
     # 4. API Call: Query balance
     resp_bal = big_bang_client.get(f"/ledger/nodes/{src_id}/balance")
     assert resp_bal.status_code == 200
-    from typing import cast
-
     balance_payload = cast(dict[str, str], resp_bal.json())
     assert Decimal(balance_payload["amount"]) == Decimal("-5.50")
     assert balance_payload["currency"] == "USD"
