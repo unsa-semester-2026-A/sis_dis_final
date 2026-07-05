@@ -1,19 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime
-import re
 
 from app.domain.value_objects.dni import DNI
 from app.domain.value_objects.email import Email
-from app.domain.value_objects.password import Password
+#from app.domain.value_objects.password import Password
 from app.domain.value_objects.phone_number import PhoneNumber
-
-from app.domain.exceptions.auth_errors import (
-    InvalidDNIError,
-    InvalidEmailError,
-    InvalidPhoneNumberError,
-    PasswordTooWeakError,
-)
-
 
 # the dataclass decorator make it like a record in java (generate getters, setters, constructors, toString)
 @dataclass
@@ -25,7 +16,6 @@ class User:
     phone_number: PhoneNumber
     email: Email
     pin_hash: str
-    pin_salt: str
     created_at: datetime
     updated_at: datetime
 
@@ -43,13 +33,10 @@ class User:
         self.phone_number = new_phone_number
         self.updated_at = datetime.now()
 
-    def update_pin(self, pin_hash: str, pin_salt: str) -> None:
+    def update_pin(self, pin_hash: str) -> None:
         if not pin_hash or not pin_hash.strip():
             raise ValueError("PIN hash cannot be empty.")
-        if not pin_salt or not pin_salt.strip():
-            raise ValueError("PIN salt cannot be empty.")
         self.pin_hash = pin_hash
-        self.pin_salt = pin_salt
         self.updated_at = datetime.now()
 
     def update_name(self, name: str, last_name: str) -> None:

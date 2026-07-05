@@ -17,3 +17,11 @@ class InvalidPhoneNumberError(AuthDomainError):
 class PasswordTooWeakError(AuthDomainError):
     """Raised when a password does not meet security requirements."""
     pass
+
+class PinLengthError(AuthDomainError):
+    """Raised when a PIN does not meet length requirements (6 digits)."""
+    pass
+
+class PinNotDigitsError(AuthDomainError):
+    """Raised when a PIN does not meet format requirements (digits only)."""
+    pass
