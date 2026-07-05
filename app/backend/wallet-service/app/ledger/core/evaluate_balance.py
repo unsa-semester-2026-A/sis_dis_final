@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from app.ledger.ports.inbound import BalanceQuery
+from app.ledger.ports.inbound import BalanceQuery, EvaluateBalancePort
 from app.ledger.ports.outbound import NodeRepository, VectorRepository
 from app.shared import Money
 
 
-class EvaluateBalanceUseCase:
+class EvaluateBalanceUseCase(EvaluateBalancePort):
     """Computes a node's balance by processing all valid vectors.
 
     Implements the formula:

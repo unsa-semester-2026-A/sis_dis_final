@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 from app.ledger.core.node import Node
-from app.ledger.ports.inbound import CreateNodeCommand
+from app.ledger.ports.inbound import CreateNodeCommand, CreateNodePort
 from app.ledger.ports.outbound import NodeRepository
 from app.shared import new_id
 
 
-class CreateNodeUseCase:
+class CreateNodeUseCase(CreateNodePort):
     """Creates a new financial node and persists it.
 
     This use case is framework-agnostic. It receives a command,

@@ -12,13 +12,17 @@ from datetime import datetime
 from decimal import Decimal
 from uuid import UUID
 
-from app.ledger.core.create_node import CreateNodeUseCase
-from app.ledger.core.emit_vector import EmitVectorUseCase
-from app.ledger.core.evaluate_balance import EvaluateBalanceUseCase
 from app.ledger.core.node import Node
 from app.ledger.core.node_type import NodeType
 from app.ledger.core.vector import Vector
-from app.ledger.ports.inbound import BalanceQuery, CreateNodeCommand, EmitVectorCommand
+from app.ledger.ports.inbound import (
+    BalanceQuery,
+    CreateNodeCommand,
+    CreateNodePort,
+    EmitVectorCommand,
+    EmitVectorPort,
+    EvaluateBalancePort,
+)
 from app.shared import DomainError, EntityId, InactiveNodeError
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field  # pyright: ignore[reportUnknownVariableType]
@@ -120,16 +124,16 @@ def _vector_to_response(vector: Vector) -> VectorResponse:
 
 
 def create_ledger_router(
-    create_node: CreateNodeUseCase,
-    emit_vector: EmitVectorUseCase,
-    evaluate_balance: EvaluateBalanceUseCase,
+    create_node: CreateNodePort,
+    emit_vector: EmitVectorPort,
+    evaluate_balance: EvaluateBalancePort,
 ) -> APIRouter:
-    """Create the ledger REST router with injected use cases.
+    """Create the ledger REST router with injected inbound ports.
 
     Args:
-        create_node: Use case for node creation.
-        emit_vector: Use case for vector emission.
-        evaluate_balance: Use case for balance evaluation.
+        create_node: Inbound port for node creation.
+        emit_vector: Inbound port for vector emission.
+        evaluate_balance: Inbound port for balance evaluation.
 
     Returns:
         APIRouter: A configured FastAPI APIRouter.

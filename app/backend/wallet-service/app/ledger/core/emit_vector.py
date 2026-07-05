@@ -6,12 +6,12 @@ import uuid
 from datetime import datetime, timezone
 
 from app.ledger.core.vector import Vector
-from app.ledger.ports.inbound import EmitVectorCommand
+from app.ledger.ports.inbound import EmitVectorCommand, EmitVectorPort
 from app.ledger.ports.outbound import NodeRepository, VectorRepository
 from app.shared import InactiveNodeError, new_id
 
 
-class EmitVectorUseCase:
+class EmitVectorUseCase(EmitVectorPort):
     """Emits a new financial mutation vector to the append-only ledger.
 
     Validates that both source and target nodes exist and are active.
