@@ -9,7 +9,13 @@ from app.domain.value_objects.password import Password
 from app.domain.value_objects.phone_number import PhoneNumber
 
 
-# from app.domain.exceptions.auth_errors import InvalidEmailError, PasswordTooWeakError
+from app.domain.exceptions.auth_errors import (
+    InvalidDNIError,
+    InvalidEmailError,
+    InvalidIBANError,
+    InvalidPhoneNumberError,
+    PasswordTooWeakError,
+)
 
 
 # the dataclass decorator make it like a record in java (generate getters, setters, constructors, toString)
