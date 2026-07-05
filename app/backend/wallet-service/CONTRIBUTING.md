@@ -44,8 +44,20 @@ Run strict type checks to guarantee type safety across Hexagonal layers (Domain,
 uv run pyright
 ```
 
-### 4. Tests (Pytest)
-Run the test suite to ensure no regressions:
+### 4. Tests and Coverage (Pytest + Cov)
+By default, running pytest will run all tests and display the coverage report (including branch coverage) directly in the terminal:
+```bash
+uv run pytest
+```
+To run tests with verbose output:
 ```bash
 uv run pytest -v
 ```
+
+#### Generating HTML Coverage Reports
+If you want to view an interactive, detailed HTML coverage report (which highlights covered/uncovered branches in your browser):
+1. Run pytest with the HTML report generator flag:
+   ```bash
+   uv run pytest --cov-report=html
+   ```
+2. Open the generated file `htmlcov/index.html` in your web browser. (This folder is ignored by git).
