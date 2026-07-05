@@ -10,10 +10,6 @@ class InvalidEmailError(AuthDomainError):
     """Raised when an email address is invalid."""
     pass
 
-class InvalidIBANError(AuthDomainError):
-    """Raised when an IBAN is invalid."""
-    pass
-
 class InvalidPhoneNumberError(AuthDomainError):
     """Raised when a phone number is invalid."""
     pass
