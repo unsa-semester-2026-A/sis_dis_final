@@ -33,6 +33,16 @@ class TestNode:
                 currency="PEN",
             )
 
+    def test_empty_string_name_raises(self) -> None:
+        with pytest.raises(ValueError, match="not be empty"):
+            Node(
+                id=new_id(),
+                user_id=new_id(),
+                name="",
+                node_type=NodeType.ASSET,
+                currency="PEN",
+            )
+
     def test_invalid_currency_raises(self) -> None:
         with pytest.raises(ValueError, match="ISO 4217"):
             Node(
@@ -41,6 +51,16 @@ class TestNode:
                 name="Bank",
                 node_type=NodeType.ASSET,
                 currency="ABCD",
+            )
+
+    def test_unsupported_3_char_currency_raises(self) -> None:
+        with pytest.raises(ValueError, match="ISO 4217"):
+            Node(
+                id=new_id(),
+                user_id=new_id(),
+                name="Bank",
+                node_type=NodeType.ASSET,
+                currency="XYZ",
             )
 
     def test_deactivate(self) -> None:
@@ -116,6 +136,10 @@ class TestVector:
     def test_negative_exchange_rate_raises(self) -> None:
         with pytest.raises(ValueError, match="positive"):
             self._make_vector(exchange_rate=Decimal("-1"))
+
+    def test_zero_exchange_rate_raises(self) -> None:
+        with pytest.raises(ValueError, match="positive"):
+            self._make_vector(exchange_rate=Decimal("0"))
 
     def test_target_amount_property(self) -> None:
         v = self._make_vector(amount=Decimal("100"), exchange_rate=Decimal("3.75"))

@@ -79,6 +79,39 @@ class TestFileNodeRepository:
         assert len(user_b_nodes) == 1
         assert user_b_nodes[0].id == node_b1.id
 
+    def test_find_by_id_corrupted_json(self, tmp_path: Path) -> None:
+        repo = FileNodeRepository(data_dir=tmp_path)
+        node_id = new_id()
+        # Create corrupted json file
+        node_file = tmp_path / "nodes" / f"{node_id}.json"
+        node_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(node_file, "w", encoding="utf-8") as f:
+            f.write("invalid json contents")
+
+        assert repo.find_by_id(node_id) is None
+
+    def test_find_by_user_skips_corrupted(self, tmp_path: Path) -> None:
+        repo = FileNodeRepository(data_dir=tmp_path)
+        user_id = new_id()
+        node = Node(
+            id=new_id(),
+            user_id=user_id,
+            name="Valid Bank",
+            node_type=NodeType.ASSET,
+            currency="USD",
+        )
+        repo.save(node)
+
+        # Create corrupted file in same dir
+        corrupted_id = new_id()
+        corrupted_file = tmp_path / "nodes" / f"{corrupted_id}.json"
+        with open(corrupted_file, "w", encoding="utf-8") as f:
+            f.write("{invalid json: }")
+
+        retrieved = repo.find_by_user(user_id)
+        assert len(retrieved) == 1
+        assert retrieved[0].id == node.id
+
 
 class TestFileVectorRepository:
     def test_append_and_find_by_node(self, tmp_path: Path) -> None:
@@ -214,3 +247,52 @@ class TestFileVectorRepository:
         results = repo.find_by_lineage(token)
         assert len(results) == 2
         assert {v.id for v in results} == {v1.id, v2.id}
+
+    def test_find_by_node_skips_corrupted(self, tmp_path: Path) -> None:
+        repo = FileVectorRepository(data_dir=tmp_path)
+        node_id = new_id()
+        now = datetime.now(tz=timezone.utc)
+        v = Vector(
+            id=new_id(),
+            lineage_token="lt-1",
+            source_node_id=node_id,
+            target_node_id=new_id(),
+            amount=Decimal("100"),
+            effective_at=now,
+            system_at=now,
+        )
+        repo.append(v)
+
+        # Create corrupted json vector file
+        corrupted_id = new_id()
+        corrupted_file = tmp_path / "vectors" / f"{corrupted_id}.json"
+        with open(corrupted_file, "w", encoding="utf-8") as f:
+            f.write("invalid")
+
+        results = repo.find_by_node(node_id)
+        assert len(results) == 1
+        assert results[0].id == v.id
+
+    def test_find_by_lineage_skips_corrupted(self, tmp_path: Path) -> None:
+        repo = FileVectorRepository(data_dir=tmp_path)
+        token = "token-123"
+        now = datetime.now(tz=timezone.utc)
+        v = Vector(
+            id=new_id(),
+            lineage_token=token,
+            source_node_id=new_id(),
+            target_node_id=new_id(),
+            amount=Decimal("100"),
+            effective_at=now,
+            system_at=now,
+        )
+        repo.append(v)
+
+        # Corrupted file in same dir
+        corrupted_file = tmp_path / "vectors" / f"{new_id()}.json"
+        with open(corrupted_file, "w", encoding="utf-8") as f:
+            f.write("invalid")
+
+        results = repo.find_by_lineage(token)
+        assert len(results) == 1
+        assert results[0].id == v.id

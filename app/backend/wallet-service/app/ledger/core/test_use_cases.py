@@ -262,6 +262,46 @@ class TestEmitVectorUseCase:
                 )
             )
 
+    def test_rejects_missing_source_node(
+        self,
+        node_repo: InMemoryNodeRepository,
+        vector_repo: InMemoryVectorRepository,
+    ) -> None:
+        from app.ledger.core.emit_vector import EmitVectorUseCase
+
+        user_id = new_id()
+        _, target = self._seed_nodes(node_repo, user_id)
+        uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
+
+        with pytest.raises(ValueError, match="Source node .* not found"):
+            uc.execute(
+                EmitVectorCommand(
+                    source_node_id=new_id(),
+                    target_node_id=target.id,
+                    amount=Decimal("10"),
+                )
+            )
+
+    def test_rejects_missing_target_node(
+        self,
+        node_repo: InMemoryNodeRepository,
+        vector_repo: InMemoryVectorRepository,
+    ) -> None:
+        from app.ledger.core.emit_vector import EmitVectorUseCase
+
+        user_id = new_id()
+        source, _ = self._seed_nodes(node_repo, user_id)
+        uc = EmitVectorUseCase(node_repo=node_repo, vector_repo=vector_repo)
+
+        with pytest.raises(ValueError, match="Target node .* not found"):
+            uc.execute(
+                EmitVectorCommand(
+                    source_node_id=source.id,
+                    target_node_id=new_id(),
+                    amount=Decimal("10"),
+                )
+            )
+
 
 # ---------------------------------------------------------------------------
 # EvaluateBalanceUseCase tests
@@ -433,3 +473,89 @@ class TestEvaluateBalanceUseCase:
         uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
         balance = uc.execute(BalanceQuery(node_id=bank.id))
         assert balance == Money.zero("PEN")
+
+    def test_evaluate_balance_missing_node_raises(
+        self,
+        node_repo: InMemoryNodeRepository,
+        vector_repo: InMemoryVectorRepository,
+    ) -> None:
+        from app.ledger.core.evaluate_balance import EvaluateBalanceUseCase
+
+        uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
+        with pytest.raises(ValueError, match="not found"):
+            uc.execute(BalanceQuery(node_id=new_id()))
+
+    def test_evaluate_balance_date_boundaries(
+        self,
+        node_repo: InMemoryNodeRepository,
+        vector_repo: InMemoryVectorRepository,
+    ) -> None:
+        from app.ledger.core.evaluate_balance import EvaluateBalanceUseCase
+
+        user_id = new_id()
+        bank = Node(
+            id=new_id(),
+            user_id=user_id,
+            name="Bank",
+            node_type=NodeType.ASSET,
+            currency="PEN",
+        )
+        salary = Node(
+            id=new_id(),
+            user_id=user_id,
+            name="Salary",
+            node_type=NodeType.SOURCE,
+            currency="PEN",
+        )
+        node_repo.save(bank)
+        node_repo.save(salary)
+
+        t1 = datetime(2026, 6, 20, 12, 0, tzinfo=timezone.utc)
+        t2 = datetime(2026, 6, 21, 12, 0, tzinfo=timezone.utc)
+        t3 = datetime(2026, 6, 22, 12, 0, tzinfo=timezone.utc)
+
+        v1 = Vector(
+            id=new_id(),
+            lineage_token="lt-1",
+            source_node_id=salary.id,
+            target_node_id=bank.id,
+            amount=Decimal("100"),
+            effective_at=t1,
+            system_at=t1,
+        )
+        v2 = Vector(
+            id=new_id(),
+            lineage_token="lt-2",
+            source_node_id=salary.id,
+            target_node_id=bank.id,
+            amount=Decimal("200"),
+            effective_at=t2,
+            system_at=t2,
+        )
+        v3 = Vector(
+            id=new_id(),
+            lineage_token="lt-3",
+            source_node_id=salary.id,
+            target_node_id=bank.id,
+            amount=Decimal("300"),
+            effective_at=t3,
+            system_at=t3,
+        )
+
+        vector_repo.append(v1)
+        vector_repo.append(v2)
+        vector_repo.append(v3)
+
+        uc = EvaluateBalanceUseCase(node_repo=node_repo, vector_repo=vector_repo)
+
+        # Test inclusive lower bound
+        b_start_t2 = uc.execute(BalanceQuery(node_id=bank.id, start_date=t2))
+        assert b_start_t2 == Money(Decimal("500"), "PEN")  # v2 + v3
+
+        # Test inclusive upper bound
+        b_end_t2 = uc.execute(BalanceQuery(node_id=bank.id, end_date=t2))
+        assert b_end_t2 == Money(Decimal("300"), "PEN")  # v1 + v2
+
+        # Test exact slice
+        b_slice = uc.execute(BalanceQuery(node_id=bank.id, start_date=t2, end_date=t2))
+        assert b_slice == Money(Decimal("200"), "PEN")  # v2 only
