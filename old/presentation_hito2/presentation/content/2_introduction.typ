@@ -1,7 +1,7 @@
 #import "../slides.typ": slide-section
 
 #slide-section(
-  title: "ENFOQUE Y CONTEXTO",
+  title: "ENFOQUE Y\nCONTEXTO",
   body: [
     *Spondylus* es un agregador de finanzas personales que consolida cuentas del consorcio de bancos e interactúa con la infraestructura *TAPP del BCRP*.
     

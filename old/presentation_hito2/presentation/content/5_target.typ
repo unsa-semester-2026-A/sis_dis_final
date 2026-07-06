@@ -50,7 +50,7 @@
     dy: 140pt,
     [
       #box(width: 860pt, height: 560pt)[
-        #image("../src/fig/diagrams/Container.svg", fit: "contain")
+        #align(center + horizon)[#image("../src/fig/diagrams/Container.svg", fit: "contain")]
       ]
     ]
   )

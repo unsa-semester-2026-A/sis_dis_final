@@ -42,56 +42,15 @@
     ]
   )
 
-  // Espacio para capturas de pantalla de la app (dos celulares simulados lado a lado)
+  // Imagen de la aplicación móvil a la derecha
   #place(
     top + left,
     dx: 720pt,
     dy: 160pt,
     [
-      #stack(
-        dir: ltr,
-        spacing: 40pt,
-        // Celular 1
-        rect(
-          width: 250pt,
-          height: 500pt,
-          radius: 24pt,
-          stroke: 2pt + style.theme.decor,
-          fill: rgb("#fcfcfc"),
-          [
-            #place(top + center, dy: 16pt)[
-              #rect(width: 80pt, height: 16pt, radius: 8pt, fill: style.theme.decor)
-            ]
-            #place(center + horizon)[
-              #align(center)[
-                #text(size: 14pt, weight: "bold", fill: style.theme.text-muted)[
-                  [Pega aquí captura de:\nAuth / Cuentas]
-                ]
-              ]
-            ]
-          ]
-        ),
-        // Celular 2
-        rect(
-          width: 250pt,
-          height: 500pt,
-          radius: 24pt,
-          stroke: 2pt + style.theme.decor,
-          fill: rgb("#fcfcfc"),
-          [
-            #place(top + center, dy: 16pt)[
-              #rect(width: 80pt, height: 16pt, radius: 8pt, fill: style.theme.decor)
-            ]
-            #place(center + horizon)[
-              #align(center)[
-                #text(size: 14pt, weight: "bold", fill: style.theme.text-muted)[
-                  [Pega aquí captura de:\nTransacciones]
-                ]
-              ]
-            ]
-          ]
-        )
-      )
+      #box(width: 640pt, height: 500pt)[
+        #align(center + horizon)[#image("../../1.png", fit: "contain")]
+      ]
     ]
   )
 ]

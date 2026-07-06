@@ -1,7 +1,7 @@
 #import "../slides.typ": slide-grid-list
 
 #slide-grid-list(
-  title: "USER STORY MAPPING",
+  title: "USER\nSTORY\nMAPPING",
   body: [
     El *Backbone* define las actividades esenciales del cliente de izquierda a derecha. Cada columna apila historias de usuario priorizadas en *releases* semanales.
   ],

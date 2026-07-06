@@ -50,7 +50,7 @@
     
     #comp.arch-image-container(
       847.67pt,
-      -60pt,
+      10pt,
       511.33pt,
       790pt,
       stroke-color: style.theme.primary,

@@ -8,5 +8,5 @@
   members: config.member-list,
   organization: config.organization,
   date: config.presentation-date,
-  image: image("../src/fig/fixed/unsa.png"),
+  image: image("../../1.png"),
 )

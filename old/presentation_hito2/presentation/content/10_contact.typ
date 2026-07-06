@@ -13,7 +13,7 @@
     dx: 81pt,
     dy: 55pt,
     [
-      #text(size: 48pt, weight: "bold", fill: style.theme.text-dark)[REFERENCIAS (IEEE)]
+      #text(size: 48pt, weight: "bold", fill: style.theme.text-dark)[REFERENCIAS]
     ]
   )
 

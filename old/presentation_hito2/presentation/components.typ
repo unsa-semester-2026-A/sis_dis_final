@@ -113,7 +113,7 @@
       stroke: 6pt + stroke-color,
     )[
       #if image != none {
-        image
+        align(center + horizon)[#image]
       } else {
         image-placeholder(label)
       }
