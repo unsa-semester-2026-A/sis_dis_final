@@ -1,0 +1,34 @@
+@startuml Container
+!include <c4/C4_Container.puml>
+
+title Diagrama de Contenedores - Spondylus (Billetera Digital)
+
+Person(client, "Cliente", "Usuario del sistema móvil.")
+
+System_Boundary(spondylus, "Spondylus (Billetera Digital)") {
+    Container(mobile, "App Móvil", "Flutter, Clean Architecture", "Interfaz de usuario, almacenamiento seguro de JWT, sincronización por relojes de Lamport.")
+    Container(gateway, "API Gateway", "Azure Container Apps Ingress", "Enrutamiento HTTPS, limitación de peticiones, validación inicial de JWT.")
+    Container(auth_svc, "auth-service", "FastAPI, Python", "Registro OTP, hashing de PIN, validación e inicio de sesión, emisión de JWT.")
+    Container(wallet_svc, "wallet-service", "FastAPI, Python", "Gestión de cuentas, iniciación de pagos, gestión de presupuestos, motor de netting de reportes.")
+    ContainerDb(sql_db, "Base de Datos SQL", "Azure SQL Database", "Almacena identidades de usuarios, cuentas vinculadas, presupuestos e idempotencia.")
+    ContainerDb(cosmos_db, "Almacenamiento de Transacciones", "Azure Cosmos DB", "Colección append-only de transacciones e historial de movimientos.")
+    Container(service_bus, "Azure Service Bus", "Message Broker", "Canal asíncrono para eventos del ciclo de pago (ej. PaymentCompleted).")
+}
+
+System_Ext(tapp_mock, "tapp-mock", "Servicio Mock de BCRP TAPP para simular alias, consentimientos y liquidación de pagos en el MVP.")
+System_Ext(banks, "Bancos del Consorcio", "Sistemas bancarios que custodian los fondos y procesan transacciones.")
+
+Rel(client, mobile, "Interactúa con la interfaz gráfica")
+Rel(mobile, gateway, "Llamadas REST/HTTPS", "JSON/JWT")
+Rel(gateway, auth_svc, "Ruta /auth/*")
+Rel(gateway, wallet_svc, "Ruta /wallet/*")
+
+Rel(auth_svc, sql_db, "Lee/Escribe datos de usuarios y OTP")
+Rel(wallet_svc, sql_db, "Lee/Escribe cuentas y presupuestos")
+Rel(wallet_svc, cosmos_db, "Lee/Escribe historial transaccional")
+Rel(wallet_svc, service_bus, "Publica eventos de pagos completados")
+Rel(service_bus, wallet_svc, "Escucha eventos para consolidación asíncrona")
+Rel(wallet_svc, tapp_mock, "Inicia transacciones y verifica consentimientos", "REST/HTTPS")
+Rel(tapp_mock, banks, "Compensa fondos físicamente")
+
+@enduml

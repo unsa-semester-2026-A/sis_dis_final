@@ -1,0 +1,15 @@
+@startuml Context
+!include <c4/C4_Context.puml>
+
+title Diagrama de Contexto - Spondylus (Billetera Digital)
+
+Person(client, "Cliente", "Persona con cuentas en uno o más bancos del consorcio.")
+System(spondylus, "Spondylus (Billetera Digital)", "Agregador de finanzas personales que permite gestionar cuentas, presupuestos y realizar transferencias interoperables.")
+System_Ext(tapp, "Infraestructura TAPP (BCRP)", "Plataforma de interoperabilidad de pagos del Banco Central de Reserva del Perú.")
+System_Ext(banks, "Bancos del Consorcio", "Entidades financieras (ej. BCP, BBVA, Interbank) que custodian los fondos y procesan los movimientos reales.")
+
+Rel(client, spondylus, "Usa para ver saldos, presupuestar y pagar")
+Rel(spondylus, tapp, "Inicia solicitudes de pago y consulta saldos")
+Rel(tapp, banks, "Valida consentimientos y compensa transacciones")
+Rel(spondylus, banks, "Consulta saldos mediante APIs bancarias seguras")
+@enduml
