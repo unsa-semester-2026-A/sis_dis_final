@@ -14,14 +14,14 @@ String _$secureStorageHash() => r'3e5177aefc9c0d43d9cb4fdca3bdc2dfcb36f13e';
 @ProviderFor(secureStorage)
 final secureStorageProvider =
     AutoDisposeProvider<FlutterSecureStorage>.internal(
-      secureStorage,
-      name: r'secureStorageProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$secureStorageHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  secureStorage,
+  name: r'secureStorageProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$secureStorageHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -45,7 +45,7 @@ final clockInterceptorProvider = AutoDisposeProvider<ClockInterceptor>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ClockInterceptorRef = AutoDisposeProviderRef<ClockInterceptor>;
-String _$apiClientHash() => r'761032ed31509ec183a25f63eabc1c8f13f28627';
+String _$apiClientHash() => r'623d80f2e14645fc94d9b66b52adc6f1a6d5d3ff';
 
 /// Provider for the configured ApiClient.
 ///
@@ -54,9 +54,8 @@ String _$apiClientHash() => r'761032ed31509ec183a25f63eabc1c8f13f28627';
 final apiClientProvider = AutoDisposeProvider<ApiClient>.internal(
   apiClient,
   name: r'apiClientProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$apiClientHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$apiClientHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
