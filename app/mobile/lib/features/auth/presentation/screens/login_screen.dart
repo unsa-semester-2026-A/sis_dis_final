@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_client.dart';
@@ -142,7 +142,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your Número de teléfono';
+                          return 'Ingresa tu número de teléfono';
                         }
                         return null;
                       },
@@ -226,7 +226,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     TextButton(
                       onPressed: () => context.go('/register/phone'),
                       child: const Text(
-                        'Â¿No tienes cuenta? RegÃ­strate',
+                        '¿No tienes cuenta? Regístrate',
                         style: TextStyle(color: Color(0xFF00FFCC)),
                       ),
                     ),
