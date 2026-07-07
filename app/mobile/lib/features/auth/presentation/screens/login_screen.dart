@@ -222,6 +222,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             ),
                     ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () => context.go('/splash'),
+                      child: const Text(
+                        '¿No tienes cuenta? Regístrate',
+                        style: TextStyle(color: Color(0xFF00FFCC)),
+                      ),
+                    ),
                   ],
                 ),
               ),

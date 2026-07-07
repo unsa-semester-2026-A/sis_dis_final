@@ -15,14 +15,14 @@ String _$authRemoteDataSourceHash() =>
 @ProviderFor(authRemoteDataSource)
 final authRemoteDataSourceProvider =
     AutoDisposeProvider<AuthRemoteDataSource>.internal(
-      authRemoteDataSource,
-      name: r'authRemoteDataSourceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$authRemoteDataSourceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  authRemoteDataSource,
+  name: r'authRemoteDataSourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authRemoteDataSourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
