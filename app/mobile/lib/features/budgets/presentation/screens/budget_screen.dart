@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../accounts/presentation/providers/nodes_provider.dart';
@@ -46,7 +46,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('Presupuestos y Categorías', style: TextStyle(color: Colors.white)),
+          title: const Text('Presupuestos y CategorÃ­as', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => context.go('/'),
@@ -97,13 +97,13 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'Monitoreo de Gasto por Categoría',
+                      'Monitoreo de Gasto por CategorÃ­a',
                       style: TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                     const SizedBox(height: 16),
                     Expanded(
                       child: sinkNodes.isEmpty
-                          ? const Center(child: Text('No hay categorías (SINK) registradas.', style: TextStyle(color: Colors.white38)))
+                          ? const Center(child: Text('No hay categorÃ­as (SINK) registradas.', style: TextStyle(color: Colors.white38)))
                           : ListView.separated(
                               itemCount: sinkNodes.length,
                               separatorBuilder: (context, index) => const SizedBox(height: 12),
@@ -136,7 +136,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 12),
-                                      // Barra de progreso de ejemplo (límite hardcodeado de 1000.0 PEN en UI)
+                                      // Barra de progreso de ejemplo (lÃ­mite hardcodeado de 1000.0 PEN en UI)
                                       balanceAsync.when(
                                         data: (val) {
                                           final amount = double.tryParse(val) ?? 0.0;
@@ -162,7 +162,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
                                                     style: const TextStyle(color: Colors.white30, fontSize: 11),
                                                   ),
                                                   const Text(
-                                                    'Meta UI: S/. 1,000.00',
+                                                    'Meta mensual: S/. 1,000.00',
                                                     style: TextStyle(color: Colors.white30, fontSize: 11),
                                                   ),
                                                 ],
@@ -191,3 +191,4 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
   );
 }
 }
+

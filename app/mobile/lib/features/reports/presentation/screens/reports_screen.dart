@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../accounts/presentation/providers/nodes_provider.dart';
@@ -48,7 +48,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('Análisis y Reportes', style: TextStyle(color: Colors.white)),
+          title: const Text('AnÃ¡lisis y Reportes', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => context.go('/'),
@@ -97,7 +97,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                                 foregroundColor: _isTagMode ? const Color(0xFF0F2027) : Colors.white70,
                               ),
                               onPressed: () => setState(() => _isTagMode = true),
-                              child: const Text('Por Tags (Netting)'),
+                              child: const Text('Por etiquetas'),
                             ),
                           ),
                         ],
@@ -128,7 +128,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
         const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
-            'Selecciona cuentas/categorías para comparar sus balances:',
+            'Selecciona cuentas/categorÃ­as para comparar sus balances:',
             style: TextStyle(color: Colors.white70, fontSize: 13),
           ),
         ),
@@ -218,7 +218,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                   minimumSize: const Size.fromHeight(48),
                 ),
                 icon: const Icon(Icons.calculate_outlined),
-                label: const Text('Calcular Netting de Tags', style: TextStyle(fontWeight: FontWeight.bold)),
+                label: const Text('Calcular balance por etiquetas', style: TextStyle(fontWeight: FontWeight.bold)),
                 onPressed: () {
                   setState(() {
                     _searchKey = _tagKeyController.text.trim();
@@ -310,3 +310,4 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     );
   }
 }
+
