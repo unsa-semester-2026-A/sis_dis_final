@@ -33,7 +33,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Presiona atrás otra vez para salir'),
+                content: Text('Presiona atrÃ¡s otra vez para salir'),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -170,7 +170,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 8),
-          // Sumar balances de manera síncrona/asíncrona
+          // Sumar balances de manera sÃ­ncrona/asÃ­ncrona
           Consumer(
             builder: (context, ref, child) {
               double total = 0;
@@ -231,6 +231,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   borderRadius: BorderRadius.circular(12),
                   side: const BorderSide(color: Colors.white10),
                 ),
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xFF00FFCC).withOpacity(0.12),
+                  child: Icon(
+                    _iconForNodeType(node.nodeType),
+                    color: const Color(0xFF00FFCC),
+                  ),
+                ),
                 title: Text(node.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 subtitle: Text(
                   node.isActive ? 'Activo' : 'Archivado',
@@ -274,7 +281,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Acciones Rápidas',
+                  'Acciones RÃ¡pidas',
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -349,3 +356,4 @@ Widget buildGlobalBottomNavigationBar(BuildContext context, int currentIndex) {
     ],
   );
 }
+

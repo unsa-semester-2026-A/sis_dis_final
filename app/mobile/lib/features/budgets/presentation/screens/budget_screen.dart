@@ -368,6 +368,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
                                                     'Límite: ${node.currency} ${limit.toStringAsFixed(2)}',
                                                     style: const TextStyle(color: Colors.white30, fontSize: 11),
                                                   ),
+
                                                 ],
                                               ),
                                             ],
@@ -398,3 +399,4 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
   );
 }
 }
+

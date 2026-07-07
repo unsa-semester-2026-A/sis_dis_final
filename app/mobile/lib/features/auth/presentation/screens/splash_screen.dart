@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// Splash / Welcome Screen (S01)
@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width > 700 ? MediaQuery.of(context).size.width * 0.35 : 24.0, vertical: 32.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,7 +46,7 @@ class SplashScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'Soberanía y Transparencia Financiera Distribuidora',
+                  'SoberanÃ­a y Transparencia Financiera Distribuidora',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -66,7 +66,7 @@ class SplashScreen extends StatelessWidget {
                     elevation: 4,
                   ),
                   child: const Text(
-                    'Iniciar Sesión',
+                    'Iniciar SesiÃ³n',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -100,3 +100,5 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
+
+

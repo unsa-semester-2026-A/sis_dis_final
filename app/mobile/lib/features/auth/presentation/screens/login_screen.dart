@@ -76,7 +76,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width > 700 ? MediaQuery.of(context).size.width * 0.35 : 24.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -101,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Distributed Personal Finance System',
+                      'Sistema distribuido de finanzas personales',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -109,13 +109,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 48),
-                    // Phone Number Input
+                    // Número de teléfono Input
                     TextFormField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: 'Phone Number',
+                        labelText: 'Número de teléfono',
                         labelStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(
                           Icons.phone_outlined,
@@ -142,20 +142,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your phone number';
+                          return 'Ingresa tu número de teléfono';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20),
-                    // PIN Code Input
+                    // PIN de acceso Input
                     TextFormField(
                       controller: _pinController,
                       keyboardType: TextInputType.number,
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: 'PIN Code',
+                        labelText: 'PIN de acceso',
                         labelStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(
                           Icons.lock_outlined,
@@ -182,10 +182,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your PIN';
+                          return 'Ingresa tu PIN';
                         }
                         if (value.length < 4) {
-                          return 'PIN must be at least 4 digits';
+                          return 'El PIN debe tener al menos 4 dígitos';
                         }
                         return null;
                       },
@@ -215,7 +215,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             )
                           : const Text(
-                              'Sign In',
+                              'Iniciar sesión',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -240,3 +240,5 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
+
+
