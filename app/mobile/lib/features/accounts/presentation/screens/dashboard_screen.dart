@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -6,28 +7,54 @@ import '../providers/nodes_provider.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/node.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  DateTime? _lastPressed;
+
+  @override
+  Widget build(BuildContext context) {
     final nodesAsync = ref.watch(nodesNotifierProvider);
     final user = ref.watch(authNotifierProvider).valueOrNull;
     final isConnected = ref.watch(connectivityProvider);
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0F2027),
-              Color(0xFF203A43),
-              Color(0xFF2C5364),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final now = DateTime.now();
+        if (_lastPressed == null || now.difference(_lastPressed!) > const Duration(seconds: 2)) {
+          _lastPressed = now;
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Presiona atrás otra vez para salir'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+          return;
+        }
+        await SystemNavigator.pop();
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0F2027),
+                Color(0xFF203A43),
+                Color(0xFF2C5364),
+              ],
+            ),
           ),
-        ),
         child: SafeArea(
           child: nodesAsync.when(
             loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF00FFCC))),
@@ -89,7 +116,7 @@ class DashboardScreen extends ConsumerWidget {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.account_circle_outlined, color: Colors.white, size: 28),
-                                onPressed: () => context.go('/profile'),
+                                onPressed: () => context.push('/profile'),
                               ),
                             ],
                           ),
@@ -121,8 +148,9 @@ class DashboardScreen extends ConsumerWidget {
         label: const Text('Acción rápida', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context, 0),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildSafeToSpendCard(BuildContext context, WidgetRef ref, List<Node> assetNodes) {
     return Container(
@@ -189,7 +217,7 @@ class DashboardScreen extends ConsumerWidget {
             return Opacity(
               opacity: node.isActive ? 1.0 : 0.5,
               child: ListTile(
-                onTap: () => context.go('/node/${node.id}'),
+                onTap: () => context.push('/node/${node.id}'),
                 tileColor: Colors.white.withOpacity(0.04),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -247,7 +275,7 @@ class DashboardScreen extends ConsumerWidget {
                   title: const Text('Nueva transferencia / gasto', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     Navigator.pop(context);
-                    context.go('/vectors/emit');
+                    context.push('/vectors/emit');
                   },
                 ),
                 ListTile(
@@ -255,7 +283,7 @@ class DashboardScreen extends ConsumerWidget {
                   title: const Text('Crear nuevo nodo financiero', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     Navigator.pop(context);
-                    context.go('/nodes/create');
+                    context.push('/nodes/create');
                   },
                 ),
               ],

@@ -157,16 +157,32 @@ class _TapIntegrationScreenState extends ConsumerState<TapIntegrationScreen> {
   Widget build(BuildContext context) {
     final tapState = ref.watch(tapNotifierProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Integración TAP (BCRP)', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        } else {
+          context.go('/profile');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Integración TAP (BCRP)', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              } else {
+                context.go('/profile');
+              }
+            },
+          ),
         ),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -345,6 +361,7 @@ class _TapIntegrationScreenState extends ConsumerState<TapIntegrationScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

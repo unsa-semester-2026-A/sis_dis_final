@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../accounts/presentation/providers/nodes_provider.dart';
 import '../../../accounts/domain/entities/node.dart';
+import '../../../../core/network/api_client.dart';
 import '../providers/vectors_provider.dart';
 
 class EmitVectorScreen extends ConsumerStatefulWidget {
@@ -87,8 +88,21 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorMessage = e.toString().replaceAll('Exception: ', '');
+        _errorMessage = formatNetworkError(e);
       });
+    }
+  }
+
+  String _translateNodeType(NodeType type) {
+    switch (type) {
+      case NodeType.asset:
+        return 'Cuenta';
+      case NodeType.liability:
+        return 'Préstamo';
+      case NodeType.source:
+        return 'Ingreso';
+      case NodeType.sink:
+        return 'Gasto';
     }
   }
 
@@ -96,16 +110,32 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
   Widget build(BuildContext context) {
     final nodesAsync = ref.watch(nodesNotifierProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Emitir Vector', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Emitir Vector', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              } else {
+                context.go('/');
+              }
+            },
+          ),
         ),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -152,7 +182,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.white30)),
                         ),
                         items: activeNodes.map((n) {
-                          return DropdownMenuItem<Node>(value: n, child: Text('${n.name} (${n.currency})'));
+                          return DropdownMenuItem<Node>(value: n, child: Text('${n.name} (${n.currency}) - ${_translateNodeType(n.nodeType)}'));
                         }).toList(),
                         onChanged: (value) => setState(() => _sourceNode = value),
                       ),
@@ -167,7 +197,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.white30)),
                         ),
                         items: activeNodes.map((n) {
-                          return DropdownMenuItem<Node>(value: n, child: Text('${n.name} (${n.currency})'));
+                          return DropdownMenuItem<Node>(value: n, child: Text('${n.name} (${n.currency}) - ${_translateNodeType(n.nodeType)}'));
                         }).toList(),
                         onChanged: (value) => setState(() => _targetNode = value),
                       ),
@@ -328,6 +358,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

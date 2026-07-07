@@ -27,16 +27,24 @@ class _VectorHistoryScreenState extends ConsumerState<VectorHistoryScreen> {
     final vectorsAsync = ref.watch(vectorsNotifierProvider);
     final nodesAsync = ref.watch(nodesNotifierProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Historial de Vectores', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (mounted) {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Historial de Vectores', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.go('/'),
+          ),
         ),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -123,7 +131,7 @@ class _VectorHistoryScreenState extends ConsumerState<VectorHistoryScreen> {
                             final targetNode = nodes.where((n) => n.id == vector.targetNodeId).firstOrNull;
 
                             return ListTile(
-                              onTap: () => context.go('/vector/${vector.id}'),
+                              onTap: () => context.push('/vector/${vector.id}'),
                               leading: CircleAvatar(
                                 backgroundColor: const Color(0xFF00FFCC).withOpacity(0.12),
                                 child: const Icon(Icons.swap_horiz, color: Color(0xFF00FFCC)),
@@ -176,6 +184,7 @@ class _VectorHistoryScreenState extends ConsumerState<VectorHistoryScreen> {
         ),
       ),
       bottomNavigationBar: buildGlobalBottomNavigationBar(context, 1),
-    );
-  }
+    ),
+  );
+}
 }

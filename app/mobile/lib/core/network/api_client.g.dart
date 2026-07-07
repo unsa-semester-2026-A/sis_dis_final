@@ -45,7 +45,7 @@ final clockInterceptorProvider = AutoDisposeProvider<ClockInterceptor>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ClockInterceptorRef = AutoDisposeProviderRef<ClockInterceptor>;
-String _$apiClientHash() => r'623d80f2e14645fc94d9b66b52adc6f1a6d5d3ff';
+String _$apiClientHash() => r'25e44545f9a8f894d03f6077bdb549c4e056bb09';
 
 /// Provider for the configured ApiClient.
 ///

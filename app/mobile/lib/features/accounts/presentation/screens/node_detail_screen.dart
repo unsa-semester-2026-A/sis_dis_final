@@ -136,16 +136,32 @@ class _NodeDetailScreenState extends ConsumerState<NodeDetailScreen> {
     final nodesAsync = ref.watch(nodesNotifierProvider);
     final vectorsAsync = ref.watch(vectorsNotifierProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Detalle del Nodo', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Detalle del Nodo', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              } else {
+                context.go('/');
+              }
+            },
+          ),
         ),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -301,7 +317,7 @@ class _NodeDetailScreenState extends ConsumerState<NodeDetailScreen> {
                               final isOutflow = vector.sourceNodeId == node.id;
                               
                               return ListTile(
-                                onTap: () => context.go('/vector/${vector.id}'),
+                                onTap: () => context.push('/vector/${vector.id}'),
                                 leading: CircleAvatar(
                                   backgroundColor: isOutflow ? Colors.redAccent.withOpacity(0.15) : Colors.greenAccent.withOpacity(0.15),
                                   child: Icon(
@@ -338,8 +354,9 @@ class _NodeDetailScreenState extends ConsumerState<NodeDetailScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 // Convertidor Json manual para los cambios locales

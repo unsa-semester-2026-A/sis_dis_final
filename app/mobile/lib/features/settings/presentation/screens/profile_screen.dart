@@ -12,16 +12,32 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(authNotifierProvider).valueOrNull;
     final clockInterceptor = ref.watch(clockInterceptorProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Mi Perfil', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Mi Perfil', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              } else {
+                context.go('/');
+              }
+            },
+          ),
         ),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -35,7 +51,8 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
         child: SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
+            child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,7 +114,7 @@ class ProfileScreen extends ConsumerWidget {
                   leading: const Icon(Icons.account_balance_outlined, color: Color(0xFF00FFCC)),
                   title: const Text('Integración TAP (BCRP / Bancos Reales)', style: TextStyle(color: Colors.white, fontSize: 14)),
                   trailing: const Icon(Icons.chevron_right, color: Colors.white54),
-                  onTap: () => context.go('/tap'),
+                  onTap: () => context.push('/tap'),
                 ),
                 const SizedBox(height: 12),
                 ListTile(
@@ -106,9 +123,9 @@ class ProfileScreen extends ConsumerWidget {
                   leading: const Icon(Icons.settings_outlined, color: Colors.white70),
                   title: const Text('Administrar Nodos Financieros', style: TextStyle(color: Colors.white, fontSize: 14)),
                   trailing: const Icon(Icons.chevron_right, color: Colors.white54),
-                  onTap: () => context.go('/nodes'),
+                  onTap: () => context.push('/nodes'),
                 ),
-                const Spacer(),
+                const SizedBox(height: 40),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -131,6 +148,8 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+   ),
+  );
+}
 }

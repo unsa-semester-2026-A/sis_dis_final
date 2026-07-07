@@ -44,12 +44,22 @@ class _RegisterPinScreenState extends ConsumerState<RegisterPinScreen> {
       _errorMessage = null;
     });
 
-    // Guardar credenciales de prueba en secure storage para simular la sesión iniciada
+    // Guardar credenciales de registro específicas en secure storage
     const storage = FlutterSecureStorage();
-    await storage.write(key: 'jwt_token', value: 'mock_jwt_token_spondylus');
-    await storage.write(key: 'user_id', value: '550e8400-e29b-41d4-a716-446655440000');
+    final digits = widget.phoneNumber.replaceAll(RegExp(r'\D'), '');
+    final padded = digits.padLeft(12, '0').substring(0, 12);
+    final userId = '550e8400-e29b-41d4-a716-$padded';
+    final name = 'Usuario ${widget.phoneNumber}';
+
+    await storage.write(key: 'auth_pin_${widget.phoneNumber}', value: pin);
+    await storage.write(key: 'auth_userid_${widget.phoneNumber}', value: userId);
+    await storage.write(key: 'auth_name_${widget.phoneNumber}', value: name);
+
+    // Iniciar sesión activa de forma inmediata para este usuario
+    await storage.write(key: 'jwt_token', value: 'jwt_token_$userId');
+    await storage.write(key: 'user_id', value: userId);
     await storage.write(key: 'user_phone', value: widget.phoneNumber);
-    await storage.write(key: 'user_name', value: 'Rafael Spondylus');
+    await storage.write(key: 'user_name', value: name);
 
     // Refrescar el estado de autenticación de Riverpod
     ref.invalidate(authNotifierProvider);
@@ -64,15 +74,21 @@ class _RegisterPinScreenState extends ConsumerState<RegisterPinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/register/phone'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        context.go('/register/phone');
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.go('/register/phone'),
+          ),
         ),
-      ),
       extendBodyBehindAppBar: true,
       body: Container(
         decoration: const BoxDecoration(
@@ -87,13 +103,14 @@ class _RegisterPinScreenState extends ConsumerState<RegisterPinScreen> {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                   const SizedBox(height: 16),
                   // Indicador de progreso
                   Row(
@@ -185,7 +202,7 @@ class _RegisterPinScreenState extends ConsumerState<RegisterPinScreen> {
                       textAlign: TextAlign.center,
                     ),
                   ],
-                  const Spacer(),
+                  const SizedBox(height: 48),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submit,
                     style: ElevatedButton.styleFrom(
@@ -217,6 +234,8 @@ class _RegisterPinScreenState extends ConsumerState<RegisterPinScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+   ),
+  );
+}
 }

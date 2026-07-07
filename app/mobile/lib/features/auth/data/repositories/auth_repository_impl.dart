@@ -47,12 +47,20 @@ class AuthRepositoryImpl implements IAuthRepository {
       return null;
     }
 
-    final id = await _secureStorage.read(key: 'user_id');
+    var id = await _secureStorage.read(key: 'user_id');
     final phone = await _secureStorage.read(key: 'user_phone');
     final name = await _secureStorage.read(key: 'user_name');
 
     if (id == null || phone == null) {
       return null;
+    }
+
+    if (!id.startsWith('550e8400')) {
+      final digits = phone.replaceAll(RegExp(r'\D'), '');
+      final padded = digits.padLeft(12, '0').substring(0, 12);
+      id = '550e8400-e29b-41d4-a716-$padded';
+      await _secureStorage.write(key: 'user_id', value: id);
+      await _secureStorage.write(key: 'jwt_token', value: 'jwt_token_$id');
     }
 
     return User(

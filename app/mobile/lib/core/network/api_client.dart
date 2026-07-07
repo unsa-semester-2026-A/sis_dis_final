@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../config/environment_config.dart';
 
 import 'clock_interceptor.dart';
 import 'jwt_interceptor.dart';
@@ -68,7 +69,7 @@ final connectivityProvider = StateProvider<bool>((ref) => true);
 ApiClient apiClient(ApiClientRef ref) {
   final dio = Dio(
     BaseOptions(
-      baseUrl: 'https://wallet-app.purplebush-0b07dd2d.eastus2.azurecontainerapps.io',
+      baseUrl: EnvironmentConfig.walletUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: <String, dynamic>{
@@ -103,4 +104,43 @@ ApiClient apiClient(ApiClientRef ref) {
   ]);
 
   return ApiClient(dio);
+}
+
+/// Helper function to format DioException errors into user-friendly messages in Spanish.
+String formatNetworkError(dynamic error) {
+  if (error is DioException) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return 'El servidor está tardando mucho en responder. Por favor, inténtalo de nuevo.';
+      case DioExceptionType.connectionError:
+        return 'No se pudo establecer conexión con el servidor. Verifica tu internet.';
+      case DioExceptionType.badResponse:
+        final status = error.response?.statusCode;
+        final responseData = error.response?.data;
+        String? detail;
+        if (responseData is Map) {
+          detail = responseData['detail']?.toString();
+        }
+        
+        if (status == 404) {
+          return detail ?? 'No se encontró el recurso solicitado en el servidor (404).';
+        } else if (status == 400) {
+          return detail ?? 'Solicitud inválida. Revisa los datos ingresados.';
+        } else if (status == 401 || status == 403) {
+          return 'Sesión expirada o no autorizada. Por favor, inicia sesión de nuevo.';
+        } else if (status == 422) {
+          return detail ?? 'Error de validación del servidor. Verifica los datos ingresados.';
+        } else if (status != null && status >= 500) {
+          return 'Error interno del servidor. Por favor, re-inténtalo más tarde.';
+        }
+        return detail ?? 'Error del servidor (${status ?? "desconocido"}).';
+      case DioExceptionType.cancel:
+        return 'La operación fue cancelada.';
+      default:
+        return 'Ocurrió un error inesperado al comunicarse con el servidor.';
+    }
+  }
+  return error.toString().replaceAll('Exception: ', '');
 }

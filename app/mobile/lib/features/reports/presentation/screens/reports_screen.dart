@@ -36,78 +36,87 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     final nodesAsync = ref.watch(nodesNotifierProvider);
     final vectorsAsync = ref.watch(vectorsNotifierProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Análisis y Reportes', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
-        ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0F2027),
-              Color(0xFF203A43),
-              Color(0xFF2C5364),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (mounted) {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Análisis y Reportes', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.go('/'),
           ),
         ),
-        child: SafeArea(
-          child: nodesAsync.when(
-            loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF00FFCC))),
-            error: (err, _) => Center(child: Text('Error: $err')),
-            data: (nodes) {
-              return Column(
-                children: [
-                  const SizedBox(height: 12),
-                  // Selector de modo
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: !_isTagMode ? const Color(0xFF00FFCC) : Colors.white12,
-                              foregroundColor: !_isTagMode ? const Color(0xFF0F2027) : Colors.white70,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0F2027),
+                Color(0xFF203A43),
+                Color(0xFF2C5364),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: nodesAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF00FFCC))),
+              error: (err, _) => Center(child: Text('Error: $err')),
+              data: (nodes) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    // Selector de modo
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: !_isTagMode ? const Color(0xFF00FFCC) : Colors.white12,
+                                foregroundColor: !_isTagMode ? const Color(0xFF0F2027) : Colors.white70,
+                              ),
+                              onPressed: () => setState(() => _isTagMode = false),
+                              child: const Text('Por Nodos'),
                             ),
-                            onPressed: () => setState(() => _isTagMode = false),
-                            child: const Text('Por Nodos'),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: _isTagMode ? const Color(0xFF00FFCC) : Colors.white12,
-                              foregroundColor: _isTagMode ? const Color(0xFF0F2027) : Colors.white70,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _isTagMode ? const Color(0xFF00FFCC) : Colors.white12,
+                                foregroundColor: _isTagMode ? const Color(0xFF0F2027) : Colors.white70,
+                              ),
+                              onPressed: () => setState(() => _isTagMode = true),
+                              child: const Text('Por Tags (Netting)'),
                             ),
-                            onPressed: () => setState(() => _isTagMode = true),
-                            child: const Text('Por Tags (Netting)'),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Expanded(
-                    child: !_isTagMode
-                        ? _buildNodeReport(nodes)
-                        : _buildTagNettingReport(vectorsAsync, nodes),
-                  ),
-                ],
-              );
-            },
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: !_isTagMode
+                          ? _buildNodeReport(nodes)
+                          : _buildTagNettingReport(vectorsAsync, nodes),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
+        bottomNavigationBar: buildGlobalBottomNavigationBar(context, 3),
       ),
-      bottomNavigationBar: buildGlobalBottomNavigationBar(context, 3),
     );
   }
 

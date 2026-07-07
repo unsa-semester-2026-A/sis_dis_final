@@ -31,4 +31,12 @@ class Node {
   final NodeType nodeType;
   final String currency;
   final bool isActive;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Node && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

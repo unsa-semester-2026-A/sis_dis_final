@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/nodes_provider.dart';
 import '../../domain/entities/node.dart';
+import '../../../../core/network/api_client.dart';
 
 class CreateNodeScreen extends ConsumerStatefulWidget {
   const CreateNodeScreen({super.key});
@@ -47,43 +48,73 @@ class _CreateNodeScreenState extends ConsumerState<CreateNodeScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorMessage = e.toString().replaceAll('Exception: ', '');
+        _errorMessage = formatNetworkError(e);
       });
+    }
+  }
+
+  String _translateNodeType(NodeType type) {
+    switch (type) {
+      case NodeType.asset:
+        return 'Cuenta / Ahorro (ASSET)';
+      case NodeType.liability:
+        return 'Obligación / Préstamo (LIABILITY)';
+      case NodeType.source:
+        return 'Fuente de Ingresos (SOURCE)';
+      case NodeType.sink:
+        return 'Categoría de Gasto (SINK)';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2027),
-        elevation: 0,
-        title: const Text('Crear nuevo nodo', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/'),
-        ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0F2027),
-              Color(0xFF203A43),
-              Color(0xFF2C5364),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0F2027),
+          elevation: 0,
+          title: const Text('Crear nuevo nodo', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              } else {
+                context.go('/');
+              }
+            },
           ),
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0F2027),
+                Color(0xFF203A43),
+                Color(0xFF2C5364),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                   const Text(
                     'Registrar Nodo Financiero',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
@@ -132,7 +163,7 @@ class _CreateNodeScreenState extends ConsumerState<CreateNodeScreen> {
                     items: NodeType.values.map((type) {
                       return DropdownMenuItem<NodeType>(
                         value: type,
-                        child: Text(type.value),
+                        child: Text(_translateNodeType(type)),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -174,7 +205,7 @@ class _CreateNodeScreenState extends ConsumerState<CreateNodeScreen> {
                       textAlign: TextAlign.center,
                     ),
                   ],
-                  const Spacer(),
+                  const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submit,
                     style: ElevatedButton.styleFrom(
@@ -206,6 +237,8 @@ class _CreateNodeScreenState extends ConsumerState<CreateNodeScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 }

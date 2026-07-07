@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -25,14 +26,44 @@ import '../../features/settings/presentation/screens/profile_screen.dart';
 
 part 'app_router.g.dart';
 
+/// Custom notifier to trigger GoRouter redirection without destroying the router instance.
+class RouterTransitionNotifier extends ChangeNotifier {
+  RouterTransitionNotifier(this._ref) {
+    _ref.listen(authNotifierProvider, (previous, next) {
+      notifyListeners();
+    });
+  }
+  final Ref _ref;
+}
+
 /// Configured GoRouter provider for navigation flow control.
 @riverpod
 GoRouter appRouter(AppRouterRef ref) {
-  final authState = ref.watch(authNotifierProvider);
-  final isLoggedIn = authState.valueOrNull != null;
+  final listenable = RouterTransitionNotifier(ref);
 
   return GoRouter(
-    initialLocation: isLoggedIn ? '/' : '/splash',
+    initialLocation: '/splash',
+    refreshListenable: listenable,
+    redirect: (context, state) {
+      // Leer el valor actual de autenticación de forma segura sin suscribir reactividad
+      final authState = ref.read(authNotifierProvider);
+      final isLoggedIn = authState.valueOrNull != null;
+      
+      final path = state.uri.path;
+      final isAuthPath = path.startsWith('/login') || 
+        path.startsWith('/register') || 
+        path.startsWith('/splash');
+      
+      if (isLoggedIn && isAuthPath) {
+        return '/';
+      }
+      
+      if (!isLoggedIn && !isAuthPath) {
+        return '/splash';
+      }
+      
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/splash',

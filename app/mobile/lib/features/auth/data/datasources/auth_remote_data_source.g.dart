@@ -7,7 +7,7 @@ part of 'auth_remote_data_source.dart';
 // **************************************************************************
 
 String _$authRemoteDataSourceHash() =>
-    r'8e514ac63c4804740314ea2e37fcd63c9a02399b';
+    r'0c07cbd062df88ae265d5ca7b5a624c60d8479e7';
 
 /// Provider for the AuthRemoteDataSource.
 ///

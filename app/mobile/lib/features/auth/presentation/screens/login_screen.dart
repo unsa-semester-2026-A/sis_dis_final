@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../../../core/network/api_client.dart';
 import '../providers/auth_provider.dart';
 
 /// Premium screen for authentication login.
@@ -41,7 +41,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              authState.error.toString().replaceAll('Exception: ', ''),
+              formatNetworkError(authState.error),
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.redAccent,
@@ -224,7 +224,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 16),
                     TextButton(
-                      onPressed: () => context.go('/splash'),
+                      onPressed: () => context.go('/register/phone'),
                       child: const Text(
                         '¿No tienes cuenta? Regístrate',
                         style: TextStyle(color: Color(0xFF00FFCC)),
