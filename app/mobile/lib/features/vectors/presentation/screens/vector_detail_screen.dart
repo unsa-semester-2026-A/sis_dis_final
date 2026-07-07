@@ -34,7 +34,7 @@ class VectorDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Esto emitirá un nuevo vector corrector de clasificación con el mismo Lineage Token para mantener el netting en cero.',
+                  'Esto registrará un movimiento corrector de clasificación para ajustar tus reportes.',
                   style: TextStyle(color: Colors.white70, fontSize: 12),
                   textAlign: TextAlign.center,
                 ),
@@ -102,7 +102,7 @@ class VectorDetailScreen extends ConsumerWidget {
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('Detalle de Vector', style: TextStyle(color: Colors.white)),
+          title: const Text('Detalle de Movimiento', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -133,7 +133,7 @@ class VectorDetailScreen extends ConsumerWidget {
             data: (vectors) {
               final vector = vectors.where((v) => v.id == vectorId).firstOrNull;
               if (vector == null) {
-                return const Center(child: Text('Vector no encontrado', style: TextStyle(color: Colors.white)));
+                return const Center(child: Text('Movimiento no encontrado', style: TextStyle(color: Colors.white)));
               }
 
               return nodesAsync.when(
@@ -193,14 +193,14 @@ class VectorDetailScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 24),
                         // Detalles de auditoría
-                        const Text('Detalles de Auditoría Logística', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+                        const Text('Detalles de Auditoría Técnica', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
                         const SizedBox(height: 12),
-                        _buildAuditField('UUID Vector', vector.id),
-                        _buildAuditField('Lineage Token', vector.lineageToken),
+                        _buildAuditField('ID de Movimiento', vector.id),
+                        _buildAuditField('Nombre de Grupo de Gasto', vector.lineageToken),
                         _buildAuditField('Fecha Efectiva', vector.effectiveAt.toLocal().toString()),
                         _buildAuditField('Fecha Sistema', vector.systemAt.toLocal().toString()),
                         _buildAuditField('Tipo de Cambio', vector.exchangeRate.toStringAsFixed(6)),
-                        if (vector.transactionId != null) _buildAuditField('TAP Ref ID', vector.transactionId!),
+                        if (vector.transactionId != null) _buildAuditField('Ref. Transacción Bancaria', vector.transactionId!),
                         if (vector.tags.isNotEmpty) ...[
                           const SizedBox(height: 16),
                           const Text('Etiquetas (Tags)', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
@@ -219,7 +219,7 @@ class VectorDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 24),
                         // Familia de linaje
                         if (lineageFamily.length > 1) ...[
-                          const Text('Familia de Netting (Mismo Lineage)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+                          const Text('Movimientos del Mismo Grupo', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
                           const SizedBox(height: 12),
                           Container(
                             padding: const EdgeInsets.all(12),
@@ -233,7 +233,7 @@ class VectorDetailScreen extends ConsumerWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Vector corrector... ${v.id.substring(0, 8)}',
+                                        'Movimiento de ajuste... ${v.id.substring(0, 8)}',
                                         style: const TextStyle(color: Colors.white54, fontSize: 12),
                                       ),
                                       Text(

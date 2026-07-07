@@ -150,7 +150,7 @@ class _NodeDetailScreenState extends ConsumerState<NodeDetailScreen> {
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('Detalle del Nodo', style: TextStyle(color: Colors.white)),
+          title: const Text('Detalle de Cuenta', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -326,7 +326,7 @@ class _NodeDetailScreenState extends ConsumerState<NodeDetailScreen> {
                                   ),
                                 ),
                                 title: Text(
-                                  isOutflow ? 'Salida hacia nodo destino' : 'Entrada desde nodo origen',
+                                  isOutflow ? 'Salida de fondos' : 'Entrada de fondos',
                                   style: const TextStyle(color: Colors.white, fontSize: 14),
                                 ),
                                 subtitle: Text(
@@ -334,7 +334,7 @@ class _NodeDetailScreenState extends ConsumerState<NodeDetailScreen> {
                                   style: const TextStyle(color: Colors.white30, fontSize: 12),
                                 ),
                                 trailing: Text(
-                                  '${isOutflow ? "-" : "+"} S/. ${vector.amount.toStringAsFixed(2)}',
+                                  '${isOutflow ? "-" : "+"} ${node.currency} ${vector.amount.toStringAsFixed(2)}',
                                   style: TextStyle(
                                     color: isOutflow ? Colors.redAccent : Colors.greenAccent,
                                     fontWeight: FontWeight.bold,

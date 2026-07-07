@@ -39,7 +39,7 @@ class _VectorHistoryScreenState extends ConsumerState<VectorHistoryScreen> {
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('Historial de Vectores', style: TextStyle(color: Colors.white)),
+          title: const Text('Historial de Movimientos', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => context.go('/'),

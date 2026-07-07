@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.spondylus.spondylus"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35          // Fijado en 35: SDK-36 falla la descarga automática
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

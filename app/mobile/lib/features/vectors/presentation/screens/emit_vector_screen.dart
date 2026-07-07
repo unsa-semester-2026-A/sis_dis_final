@@ -124,7 +124,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('Emitir Vector', style: TextStyle(color: Colors.white)),
+          title: const Text('Registrar Movimiento', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -168,7 +168,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        'Registra un flujo de fondos de un nodo origen (salida) a un destino (entrada).',
+                        'Mueve fondos entre cuentas, registra gastos o ingresos.',
                         style: TextStyle(color: Colors.white70, fontSize: 13),
                       ),
                       const SizedBox(height: 24),
@@ -177,7 +177,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                         dropdownColor: const Color(0xFF162A30),
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                          labelText: 'Nodo Origen',
+                          labelText: 'Cuenta / Categoría de origen',
                           labelStyle: const TextStyle(color: Colors.white70),
                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.white30)),
                         ),
@@ -192,7 +192,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                         dropdownColor: const Color(0xFF162A30),
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                          labelText: 'Nodo Destino',
+                          labelText: 'Cuenta / Categoría de destino',
                           labelStyle: const TextStyle(color: Colors.white70),
                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.white30)),
                         ),
@@ -275,14 +275,36 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      // Lineage Token
-                      TextFormField(
-                        controller: _lineageController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          labelText: 'Lineage Token (Opcional - Netting/Split)',
-                          labelStyle: const TextStyle(color: Colors.white70),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.white30)),
+                      // Opciones avanzadas (colapsable)
+                      Theme(
+                        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                        child: ExpansionTile(
+                          tilePadding: EdgeInsets.zero,
+                          title: const Row(
+                            children: [
+                              Icon(Icons.settings, color: Colors.white54, size: 16),
+                              SizedBox(width: 8),
+                              Text(
+                                'Opciones avanzadas',
+                                style: TextStyle(color: Colors.white54, fontSize: 13),
+                              ),
+                            ],
+                          ),
+                          iconColor: Colors.white38,
+                          collapsedIconColor: Colors.white38,
+                          children: [
+                            TextFormField(
+                              controller: _lineageController,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                labelText: 'Nombre de grupo de gasto (ej: viaje-arequipa)',
+                                labelStyle: const TextStyle(color: Colors.white70),
+                                helperText: 'Usa el mismo nombre en otros movimientos para dividirlos o agruparlos',
+                                helperStyle: const TextStyle(color: Colors.white38, fontSize: 11),
+                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.white30)),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -348,7 +370,7 @@ class _EmitVectorScreenState extends ConsumerState<EmitVectorScreen> {
                                 width: 20,
                                 child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation(Color(0xFF0F2027))),
                               )
-                            : const Text('Emitir Vector', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            : const Text('Guardar movimiento', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),

@@ -95,7 +95,11 @@ ApiClient apiClient(ApiClientRef ref) {
             error.type == DioExceptionType.sendTimeout ||
             error.type == DioExceptionType.receiveTimeout ||
             error.type == DioExceptionType.connectionError) {
+          // Error de red real: sin conexión o servidor caído
           ref.read(connectivityProvider.notifier).state = false;
+        } else if (error.type == DioExceptionType.badResponse) {
+          // El servidor respondió (aunque sea 404/422): hay conexión real
+          ref.read(connectivityProvider.notifier).state = true;
         }
         return handler.next(error);
       },

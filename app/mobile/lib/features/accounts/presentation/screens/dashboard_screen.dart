@@ -110,6 +110,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               IconButton(
                                 icon: const Icon(Icons.sync, color: Color(0xFF00FFCC)),
                                 onPressed: () {
+                                  // Restablece el indicador optimistamente antes de recargar
+                                  ref.read(connectivityProvider.notifier).state = true;
                                   ref.invalidate(nodesNotifierProvider);
                                   ref.invalidate(nodeBalanceProvider);
                                 },
@@ -127,10 +129,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       _buildSafeToSpendCard(context, ref, assetNodes),
                       const SizedBox(height: 24),
                       // Secciones de nodos
-                      _buildNodeSection(context, ref, 'Cuentas Bancarias (ASSET)', nodes.where((n) => n.nodeType == NodeType.asset).toList()),
-                      _buildNodeSection(context, ref, 'Deudas y Préstamos (LIABILITY)', nodes.where((n) => n.nodeType == NodeType.liability).toList()),
-                      _buildNodeSection(context, ref, 'Fuentes de Ingreso (SOURCE)', nodes.where((n) => n.nodeType == NodeType.source).toList()),
-                      _buildNodeSection(context, ref, 'Categorías de Gasto (SINK)', nodes.where((n) => n.nodeType == NodeType.sink).toList()),
+                      _buildNodeSection(context, ref, 'Cuentas y Ahorros', Icons.account_balance, nodes.where((n) => n.nodeType == NodeType.asset).toList()),
+                      _buildNodeSection(context, ref, 'Deudas y Préstamos', Icons.credit_card, nodes.where((n) => n.nodeType == NodeType.liability).toList()),
+                      _buildNodeSection(context, ref, 'Fuentes de Ingresos', Icons.trending_up, nodes.where((n) => n.nodeType == NodeType.source).toList()),
+                      _buildNodeSection(context, ref, 'Categorías de Gasto', Icons.shopping_cart, nodes.where((n) => n.nodeType == NodeType.sink).toList()),
                       const SizedBox(height: 80), // Espacio para el BottomBar
                     ],
                   ),
@@ -145,7 +147,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         backgroundColor: const Color(0xFF00FFCC),
         foregroundColor: const Color(0xFF0F2027),
         icon: const Icon(Icons.add),
-        label: const Text('Acción rápida', style: TextStyle(fontWeight: FontWeight.bold)),
+        label: const Text('Nueva operación', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context, 0),
     ),
@@ -192,7 +194,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  Widget _buildNodeSection(BuildContext context, WidgetRef ref, String title, List<Node> nodes) {
+  Widget _buildNodeSection(BuildContext context, WidgetRef ref, String title, IconData icon, List<Node> nodes) {
     if (nodes.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -200,9 +202,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
-          child: Text(
-            title,
-            style: const TextStyle(color: Color(0xFF00FFCC), fontWeight: FontWeight.bold, fontSize: 15),
+          child: Row(
+            children: [
+              Icon(icon, color: const Color(0xFF00FFCC), size: 18),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: const TextStyle(color: Color(0xFF00FFCC), fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+            ],
           ),
         ),
         ListView.separated(
@@ -272,7 +280,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 const SizedBox(height: 16),
                 ListTile(
                   leading: const Icon(Icons.swap_horiz, color: Color(0xFF00FFCC)),
-                  title: const Text('Nueva transferencia / gasto', style: TextStyle(color: Colors.white)),
+                  title: const Text('Registrar ingreso / gasto / transferencia', style: TextStyle(color: Colors.white)),
+                  subtitle: const Text('Mueve dinero entre tus cuentas y categorías', style: TextStyle(color: Colors.white38, fontSize: 11)),
                   onTap: () {
                     Navigator.pop(context);
                     context.push('/vectors/emit');
@@ -280,7 +289,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.account_balance_outlined, color: Color(0xFF00FFCC)),
-                  title: const Text('Crear nuevo nodo financiero', style: TextStyle(color: Colors.white)),
+                  title: const Text('Crear cuenta o categoría', style: TextStyle(color: Colors.white)),
+                  subtitle: const Text('Agrega una cuenta bancaria, deuda o categoría de gasto', style: TextStyle(color: Colors.white38, fontSize: 11)),
                   onTap: () {
                     Navigator.pop(context);
                     context.push('/nodes/create');
@@ -308,9 +318,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         if (index == 3) context.go('/reports');
       },
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.history_toggle_off), label: 'Vectores'),
-        BottomNavigationBarItem(icon: Icon(Icons.pie_chart_outline), label: 'Presupuestos'),
+        BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Inicio'),
+        BottomNavigationBarItem(icon: Icon(Icons.history_toggle_off), label: 'Movimientos'),
+        BottomNavigationBarItem(icon: Icon(Icons.pie_chart_outline), label: 'Presupuesto'),
         BottomNavigationBarItem(icon: Icon(Icons.bar_chart_outlined), label: 'Reportes'),
       ],
     );
@@ -332,9 +342,9 @@ Widget buildGlobalBottomNavigationBar(BuildContext context, int currentIndex) {
       if (index == 3) context.go('/reports');
     },
     items: const [
-      BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Home'),
-      BottomNavigationBarItem(icon: Icon(Icons.history_toggle_off), label: 'Vectores'),
-      BottomNavigationBarItem(icon: Icon(Icons.pie_chart_outline), label: 'Presupuestos'),
+      BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Inicio'),
+      BottomNavigationBarItem(icon: Icon(Icons.history_toggle_off), label: 'Movimientos'),
+      BottomNavigationBarItem(icon: Icon(Icons.pie_chart_outline), label: 'Presupuesto'),
       BottomNavigationBarItem(icon: Icon(Icons.bar_chart_outlined), label: 'Reportes'),
     ],
   );
