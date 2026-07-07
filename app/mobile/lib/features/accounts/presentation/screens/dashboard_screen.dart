@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/nodes_provider.dart';
+import '../../../../core/network/api_client.dart';
 import '../../domain/entities/node.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -12,6 +13,7 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final nodesAsync = ref.watch(nodesNotifierProvider);
     final user = ref.watch(authNotifierProvider).valueOrNull;
+    final isConnected = ref.watch(connectivityProvider);
 
     return Scaffold(
       body: Container(
@@ -57,9 +59,22 @@ class DashboardScreen extends ConsumerWidget {
                                 'Hola, ${user?.name ?? "Rafael"}',
                                 style: const TextStyle(fontSize: 16, color: Colors.white70),
                               ),
-                              const Text(
-                                'Spondylus Wallet',
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Spondylus Wallet',
+                                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      color: isConnected ? const Color(0xFF00FFCC) : Colors.cyanAccent,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
