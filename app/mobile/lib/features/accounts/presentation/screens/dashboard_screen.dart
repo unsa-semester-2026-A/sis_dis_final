@@ -33,7 +33,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Presiona atrÃ¡s otra vez para salir'),
+                content: Text('Presiona atrás otra vez para salir'),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -170,7 +170,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 8),
-          // Sumar balances de manera sÃ­ncrona/asÃ­ncrona
+          // Sumar balances de manera síncrona/asíncrona
           Consumer(
             builder: (context, ref, child) {
               double total = 0;
@@ -192,6 +192,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ],
       ),
     );
+  }
+
+  IconData _iconForNodeType(NodeType type) {
+    switch (type) {
+      case NodeType.asset:
+        return Icons.account_balance_outlined;
+      case NodeType.liability:
+        return Icons.credit_card_outlined;
+      case NodeType.source:
+        return Icons.trending_up;
+      case NodeType.sink:
+        return Icons.shopping_bag_outlined;
+    }
   }
 
   Widget _buildNodeSection(BuildContext context, WidgetRef ref, String title, IconData icon, List<Node> nodes) {
@@ -281,7 +294,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Acciones RÃ¡pidas',
+                  'Acciones Rápidas',
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),

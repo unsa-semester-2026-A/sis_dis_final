@@ -68,7 +68,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> with SingleTicker
         appBar: AppBar(
           backgroundColor: const Color(0xFF0F2027),
           elevation: 0,
-          title: const Text('AnÃ¡lisis y Reportes', style: TextStyle(color: Colors.white)),
+          title: const Text('Análisis y Reportes', style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => context.go('/'),
