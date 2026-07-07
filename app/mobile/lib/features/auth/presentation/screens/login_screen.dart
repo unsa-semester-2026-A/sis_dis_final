@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_client.dart';
@@ -101,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Distributed Personal Finance System',
+                      'Sistema distribuido de finanzas personales',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -109,13 +109,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 48),
-                    // Phone Number Input
+                    // Número de teléfono Input
                     TextFormField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: 'Phone Number',
+                        labelText: 'Número de teléfono',
                         labelStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(
                           Icons.phone_outlined,
@@ -142,20 +142,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your phone number';
+                          return 'Please enter your Número de teléfono';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20),
-                    // PIN Code Input
+                    // PIN de acceso Input
                     TextFormField(
                       controller: _pinController,
                       keyboardType: TextInputType.number,
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: 'PIN Code',
+                        labelText: 'PIN de acceso',
                         labelStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(
                           Icons.lock_outlined,
@@ -182,10 +182,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your PIN';
+                          return 'Ingresa tu PIN';
                         }
                         if (value.length < 4) {
-                          return 'PIN must be at least 4 digits';
+                          return 'El PIN debe tener al menos 4 dígitos';
                         }
                         return null;
                       },
@@ -215,7 +215,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             )
                           : const Text(
-                              'Sign In',
+                              'Iniciar sesión',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -226,7 +226,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     TextButton(
                       onPressed: () => context.go('/register/phone'),
                       child: const Text(
-                        '¿No tienes cuenta? Regístrate',
+                        'Â¿No tienes cuenta? RegÃ­strate',
                         style: TextStyle(color: Color(0xFF00FFCC)),
                       ),
                     ),
@@ -240,3 +240,4 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
+
