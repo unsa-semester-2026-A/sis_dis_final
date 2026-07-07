@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width > 700 ? MediaQuery.of(context).size.width * 0.35 : 24.0, vertical: 32.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -100,4 +100,5 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
+
 

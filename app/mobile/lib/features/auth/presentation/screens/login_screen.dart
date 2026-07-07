@@ -76,7 +76,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width > 700 ? MediaQuery.of(context).size.width * 0.35 : 24.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -240,4 +240,5 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
+
 
