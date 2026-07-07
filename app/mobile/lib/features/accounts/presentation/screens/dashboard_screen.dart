@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +33,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Presiona atrás otra vez para salir'),
+                content: Text('Presiona atrÃ¡s otra vez para salir'),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -128,9 +128,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       const SizedBox(height: 24),
                       // Secciones de nodos
                       _buildNodeSection(context, ref, 'Cuentas Bancarias (ASSET)', nodes.where((n) => n.nodeType == NodeType.asset).toList()),
-                      _buildNodeSection(context, ref, 'Deudas y Préstamos (LIABILITY)', nodes.where((n) => n.nodeType == NodeType.liability).toList()),
+                      _buildNodeSection(context, ref, 'Deudas y PrÃ©stamos (LIABILITY)', nodes.where((n) => n.nodeType == NodeType.liability).toList()),
                       _buildNodeSection(context, ref, 'Fuentes de Ingreso (SOURCE)', nodes.where((n) => n.nodeType == NodeType.source).toList()),
-                      _buildNodeSection(context, ref, 'Categorías de Gasto (SINK)', nodes.where((n) => n.nodeType == NodeType.sink).toList()),
+                      _buildNodeSection(context, ref, 'CategorÃ­as de Gasto (SINK)', nodes.where((n) => n.nodeType == NodeType.sink).toList()),
                       const SizedBox(height: 80), // Espacio para el BottomBar
                     ],
                   ),
@@ -145,7 +145,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         backgroundColor: const Color(0xFF00FFCC),
         foregroundColor: const Color(0xFF0F2027),
         icon: const Icon(Icons.add),
-        label: const Text('Acción rápida', style: TextStyle(fontWeight: FontWeight.bold)),
+        label: const Text('AcciÃ³n rÃ¡pida', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context, 0),
     ),
@@ -168,7 +168,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 8),
-          // Sumar balances de manera síncrona/asíncrona
+          // Sumar balances de manera sÃ­ncrona/asÃ­ncrona
           Consumer(
             builder: (context, ref, child) {
               double total = 0;
@@ -192,6 +192,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
+  IconData _iconForNodeType(NodeType type) {
+    switch (type) {
+      case NodeType.asset:
+        return Icons.account_balance_outlined;
+      case NodeType.liability:
+        return Icons.credit_card_outlined;
+      case NodeType.source:
+        return Icons.trending_up;
+      case NodeType.sink:
+        return Icons.shopping_bag_outlined;
+    }
+  }
   Widget _buildNodeSection(BuildContext context, WidgetRef ref, String title, List<Node> nodes) {
     if (nodes.isEmpty) return const SizedBox.shrink();
 
@@ -222,6 +234,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: const BorderSide(color: Colors.white10),
+                ),
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xFF00FFCC).withOpacity(0.12),
+                  child: Icon(
+                    _iconForNodeType(node.nodeType),
+                    color: const Color(0xFF00FFCC),
+                  ),
                 ),
                 title: Text(node.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 subtitle: Text(
@@ -266,7 +285,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Acciones Rápidas',
+                  'Acciones RÃ¡pidas',
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -339,3 +358,4 @@ Widget buildGlobalBottomNavigationBar(BuildContext context, int currentIndex) {
     ],
   );
 }
+
