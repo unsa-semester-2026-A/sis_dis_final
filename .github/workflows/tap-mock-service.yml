@@ -7,7 +7,7 @@ on:
       - develop
       - 'build/**'
     paths:
-      - 'tap-mock-service/**'
+      - 'app/backend/tap-mock-service/**'
       - '.github/workflows/tap-mock-service.yml'
   workflow_dispatch:
 
@@ -38,8 +38,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./tap-mock-service
-          file: ./tap-mock-service/Dockerfile
+          context: ./app/backend/tap-mock-service
+          file: ./app/backend/tap-mock-service/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/tap-mock-app:latest
