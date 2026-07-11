@@ -1,0 +1,1 @@
+"""finance/persistence package."""
